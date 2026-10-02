@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ഓർഗനൈസേഷൻ പോർട്ടൽ | Organizational Management & Action Network</title>
+  <title>ഓർഗനൈസേഷൻ പോർട്ടൽ | Organizational Action & Leadership Network</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Manrope:wght@500;600;700;800&family=Noto+Sans+Malayalam:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Noto+Sans+Malayalam:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
       --primary: #047857;
@@ -16,12 +16,11 @@
       --indigo: #4f46e5;
       --danger: #dc2626;
       --warning: #d97706;
-      --purple: #7c3aed;
       --bg: #f8fafc;
       --card-bg: #ffffff;
       --text-main: #0f172a;
       --text-muted: #64748b;
-      --border: #e2e8f0;
+      --border: #cbd5e1;
       --wa-green: #25d366;
     }
 
@@ -32,31 +31,31 @@
       background-color: var(--bg);
       color: var(--text-main);
       line-height: 1.55;
-      padding-bottom: 90px;
+      padding-bottom: 80px;
     }
 
     #auth-gate-screen {
-      position: fixed; inset: 0; background: #0f172a;
+      position: fixed; inset: 0; background: radial-gradient(circle at top, #1e293b, #0f172a);
       display: flex; align-items: center; justify-content: center;
       padding: 16px; z-index: 99999;
     }
     .auth-card {
-      background: #ffffff; width: 100%; max-width: min(100%, 480px);
-      border-radius: 20px; padding: 24px 20px;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); text-align: center;
+      background: #ffffff; width: 100%; max-width: min(100%, 460px);
+      border-radius: 20px; padding: 26px 20px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.45); text-align: center;
     }
     .auth-badge {
-      display: inline-block; background: #ecfdf5; color: #065f46;
-      padding: 5px 14px; border-radius: 999px; font-size: 12px; font-weight: 800; margin-bottom: 12px;
+      display: inline-block; background: #ecfdf5; color: #047857;
+      padding: 4px 14px; border-radius: 999px; font-size: 11.5px; font-weight: 800; margin-bottom: 10px;
     }
-    .auth-card h2 { font-size: 19px; font-weight: 800; color: #0f172a; margin-bottom: 4px; }
-    .auth-card p.auth-desc { font-size: 12.5px; color: #64748b; margin-bottom: 14px; line-height: 1.45; }
+    .auth-card h2 { font-size: 18.5px; font-weight: 800; color: #0f172a; margin-bottom: 4px; }
+    .auth-card p.auth-desc { font-size: 12px; color: #64748b; margin-bottom: 16px; line-height: 1.5; }
     
     .unit-switch-box {
       background: #f1f5f9; border: 1.5px solid #cbd5e1; border-radius: 10px;
       padding: 10px; margin-bottom: 14px; text-align: left;
     }
-    .unit-switch-box label { font-size: 11.5px; font-weight: 700; color: #334155; display: block; margin-bottom: 4px; }
+    .unit-switch-box label { font-size: 11px; font-weight: 700; color: #334155; display: block; margin-bottom: 4px; }
     .unit-select-control {
       width: 100%; padding: 8px 10px; border-radius: 6px; border: 1.5px solid #94a3b8;
       font-size: 13px; font-weight: 700; color: #0f172a; background: #fff; outline: none;
@@ -88,7 +87,7 @@
     .guest-btn:hover { background: #f1f5f9; color: #0f172a; }
     .btn-new-unit {
       background: #eff6ff; color: #1d4ed8; border: 1px dashed #3b82f6; width: 100%;
-      padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: 800; cursor: pointer;
+      padding: 8px 12px; border-radius: 8px; font-size: 11.5px; font-weight: 800; cursor: pointer;
     }
     .auth-error {
       color: #dc2626; font-size: 12px; font-weight: 600; margin-top: 8px; display: none;
@@ -104,13 +103,12 @@
       max-width: 1280px; margin: 0 auto; display: flex; flex-wrap: wrap;
       justify-content: space-between; align-items: center; gap: 10px; width: 100%;
     }
-    .brand { min-width: 0; }
-    .brand h1 { font-size: 17px; font-weight: 800; line-height: 1.25; }
+    .brand h1 { font-size: 16.5px; font-weight: 800; line-height: 1.25; }
     .brand p { font-size: 11px; color: #a7f3d0; }
     .header-controls { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
     .tier-badge {
       background: rgba(255, 255, 255, 0.2); border: 1px solid rgba(255, 255, 255, 0.35);
-      padding: 4px 10px; border-radius: 999px; font-size: 11.5px; font-weight: 700; color: #ffffff;
+      padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; color: #ffffff;
       white-space: nowrap;
     }
     .btn-header {
@@ -344,7 +342,7 @@
       <div class="header-container">
         <div class="brand">
           <h1 id="app-header-title">ഓർഗനൈസേഷൻ പോർട്ടൽ</h1>
-          <p id="app-header-sub">ആക്ഷൻ പ്ലാനർ & കമ്മ്യൂണിറ്റി കോർഡിനേഷൻ നെറ്റ്വർക്ക്</p>
+          <p id="app-header-sub">ആക്ഷൻ പ്ലാനർ & ലീഡർഷിപ്പ് നെറ്റ്‌വർക്ക്</p>
         </div>
         <div class="header-controls">
           <span id="user-role-badge" class="tier-badge">കോർ കമ്മിറ്റി (Admin)</span>
@@ -471,7 +469,7 @@
         <button onclick="switchTab('escalate')" id="tab-escalate" class="tab-btn tab-escalate">🗳️ താഴെത്തട്ട് നിർദ്ദേശങ്ങളും അപ്‌വോട്ടും (Bottom-Up Ideas)</button>
         <button onclick="switchTab('broadcast')" id="tab-broadcast" class="tab-btn">📢 മേൽത്തട്ട് നയങ്ങളും സർക്കുലറുകളും (Top-Down Directives)</button>
         <button onclick="switchTab('community')" id="tab-community" class="tab-btn tab-community">🤝 കമ്മ്യൂണിറ്റി കെയർ & ശാക്തീകരണം (Welfare Hub)</button>
-        <button onclick="switchTab('subwings')" id="tab-subwings" class="tab-btn">🏢 സബ് വിംഗുകൾ & മിഷൻ</button>
+        <button onclick="switchTab('subwings')" id="tab-subwings" class="tab-btn">🛡️️ സബ് വിംഗുകൾ & മിഷൻ</button>
         <button onclick="switchTab('collab')" id="tab-collab" class="tab-btn tab-collab">🤝 സഹകരണ ഘടകങ്ങൾ (Collab)</button>
         <button onclick="switchTab('individuals')" id="tab-individuals" class="tab-btn">👤 കമ്മിറ്റി സ്ഥാന ചുമതലകൾ</button>
         <button onclick="switchTab('messages')" id="tab-messages" class="tab-btn">💬 വാട്സാപ്പ് സന്ദേശങ്ങൾ (Tier Messaging)</button>
@@ -529,7 +527,7 @@
         <div class="card-header">
           <div class="card-title">
             <h2>🤝 കമ്മ്യൂണിറ്റി കെയർ & ജനക്ഷേമ ശാക്തീകരണം (Welfare & Empowerment Hub)</h2>
-            <p>ജോലി അന്വേഷണം, മംഗല്യ വേദി, പലിശരഹിത വായ്പാ നിധി, 24x7 ബ്ലഡ് ബാങ്ക്, മെഡിക്കൽ ഉപകരണ ബാങ്ക്</p>
+            <p>ജോബ് കണക്റ്റ്, മംഗല്യ വേദി, പലിശരഹിത വായ്പാ നിധി, 24x7 ബ്ലഡ് ബാങ്ക്, സൗജന്യ മെഡിക്കൽ ഉപകരണ ബാങ്ക്</p>
           </div>
           <div>
             <button onclick="openServiceModal()" class="btn-action">➕ സഹായ അപേക്ഷ / എൻട്രി ചേർക്കുക</button>
@@ -552,7 +550,7 @@
               <h4 style="font-size:13.5px; font-weight:800;">🌍 പ്രവാസി ക്ഷേമം & SIC കോർഡിനേഷൻ</h4>
               <span class="service-badge" style="background:#ccfbf1; color:#0f766e;">ഗ്ലോബൽ വിംഗ്</span>
             </div>
-            <p style="font-size:11.5px; color:#64748b;">പ്രവാസികളുടെ അടിയന്തിര പ്രശ്നങ്ങൾ, നിയമസഹായം, മൃതദേഹം നാട്ടിലെത്തിക്കൽ, പ്രവാസി പെൻഷൻ വിവരങ്ങൾ.</p>
+            <p style="font-size:11.5px; color:#64748b;">പ്രവാസികളുടെ അടിയന്തിര പ്രശ്നങ്ങൾ, നിയമസഹായം, മൃതദേഹം നാട്ടിലെത്തിക്കൽ, പ്രവാസി ക്ഷേമ വിവരങ്ങൾ.</p>
             <div id="community-pravasi-list" style="margin-top:6px; font-size:11.5px;">• <strong>SIC ഹെൽപ്പ്‌ലൈൻ:</strong> ജിസിസി രാജ്യങ്ങളിലെ ചാപ്റ്ററുകളുമായി ബന്ധപ്പെടാം.<br>• <strong>ഇ-ലേണിംഗ്:</strong> പ്രവാസി കുട്ടികൾക്ക് ഓൺലൈൻ മദ്റസാ പ്രവേശനം.</div>
             <button onclick="sharePravasiDeskWA()" class="btn-whatsapp" style="font-size:11px; padding:5px 10px; margin-top:auto;">📲 ഗ്ലോബൽ പ്രവാസി ഡെസ്ക് ഷെയർ</button>
           </div>
@@ -612,7 +610,7 @@
       <div id="view-subwings" class="content-card hidden">
         <div class="card-header">
           <div class="card-title">
-            <h2>🛡️ സബ് വിംഗുകൾ & ശാശ്വത മിഷൻ</h2>
+            <h2>🛡 സബ് വിംഗുകൾ & ശാശ്വത മിഷൻ</h2>
             <p>വിഖായ, സഹചാരി, ട്രെൻഡ്, സർഗലയം, ഇബാദ്, ഇസ്തിഖാമ, മനീഷ, കാമ്പസ്, ത്വലബ, മീഡിയ, ഐ.എഫ്.സി</p>
           </div>
           <div style="display:flex; gap:6px; align-items:center;">
@@ -733,7 +731,7 @@
       <p style="font-size:12px; color:#64748b; margin-bottom:12px;">താങ്കൾ സമർപ്പിക്കുന്ന നിർദ്ദേശത്തിന് 60% അംഗങ്ങളുടെ പിന്തുണ ലഭിച്ചാൽ മേൽത്തട്ടിലേക്ക് നേരിട്ട് എസ്കലേഷൻ ചെയ്യപ്പെടും!</p>
       <div class="form-group">
         <label>നിർദ്ദേശത്തിന്റെ തലക്കെട്ട് (Title) *</label>
-        <input type="text" id="modal-idea-title" class="form-control" placeholder="ഉദാ: തീരദേശ ആംബുലൻസ് സർവീസ്">
+        <input type="text" id="modal-idea-title" class="form-control" placeholder="ഉദാ: സൗജന്യ ആംബുലൻസ് സർവീസ്">
       </div>
       <div class="form-group">
         <label>വിശദീകരണം & നേട്ടങ്ങൾ (Details) *</label>
@@ -911,7 +909,7 @@
       "ഇസ്തിഖാമ": { color: "#059669", taskTitle: "അഹ്‌ലുസ്സുന്ന ആദർശ സംരക്ഷണം, പുത്തനാശയ പ്രതിരോധം & സംവാദങ്ങൾ" },
       "ട്രെൻഡ്": { color: "#ea580c", taskTitle: "Taste സോഫ്റ്റ് സ്കിൽ പരിശീലനം, കരിയർ ക്ലിനിക്ക് & ജോബ് കണക്റ്റ്" },
       "സർഗലയം": { color: "#7c3aed", taskTitle: "സർഗ്ഗസംഗമം മത്സരങ്ങൾ, സാഹിത്യ കളരി, മീലാദ് സപ്ലിമെന്റ് & ക്രിയേറ്റീവ് വേദികൾ" },
-      "ഓർഗാനെറ്റ്": { color: "#0369a1", taskTitle: "കാഡർ മാനേജ്‌മെന്റ്, അദാലത്ത്, സർട്ടിഫിക്കറ്റ് കോഴ്സുകൾ, റിസർച്ച്" },
+      "ഓർഗാനെറ്റ്": { color: "#0369a1", taskTitle: "കാഡർ മാനേജ്‌‌മെന്റ്, അദാലത്ത്, സർട്ടിഫിക്കറ്റ് കോഴ്സുകൾ, റിസർച്ച്" },
       "സത്യധാര": { color: "#0891b2", taskTitle: "ഔദ്യോഗിക മുഖപത്ര പ്രചാരണം & വരിചേർക്കൽ കാമ്പയിൻ" },
       "ക്യാമ്പസ് വിംഗ്": { color: "#0284c7", taskTitle: "ഭൗതിക കലാലയ വിദ്യാർത്ഥി ഏകോപനം, ധാർമിക സംസ്കരണം" },
       "മനീഷ": { color: "#b45309", taskTitle: "സാംസ്കാരിക ബൗദ്ധിക പ്രതിരോധം, ഇസ്‌‌ലാമോഫോബിയ കൗണ്ടർ" },
@@ -919,7 +917,7 @@
     };
 
     const COLLAB_SISTER_TASKS = [
-      { id: 9008, sister: "sic", title: "ഗ്ലോബൽ SIC പ്രവാസി സംഗമവും കൗൺസിൽ ഏകോപനവും", wing: "ഓർഗാനെറ്റ്", desc: "ഗൾഫ് - യൂറോപ്പ് നാടുകളിലെ ഇസ്‌ലാമിക് സെന്ററുകളുമായി ചേർന്നുള്ള ഗ്ലോബൽ നെറ്റ്വർക്കിംഗ്.", tier: "global", status: "in-progress" },
+      { id: 9008, sister: "sic", title: "ഗ്ലോബൽ SIC പ്രവാസി സംഗമവും കൗൺസിൽ ഏകോപനവും", wing: "ഓർഗാനെറ്റ്", desc: "ഗൾഫ് - യൂറോപ്പ് നാടുകളിലെ ഇസ്‌‌ലാമിക് സെന്ററുകളുമായി ചേർന്നുള്ള ഗ്ലോബൽ നെറ്റ്വർക്കിംഗ്.", tier: "global", status: "in-progress" },
       { id: 9009, sister: "spc", title: "പ്രവാസി ക്ഷേമനിധി & അടിയന്തിര ലീഗൽ എയ്ഡ് ഹെൽപ്പ് ഡെസ്ക്", wing: "സഹചാരി", desc: "പ്രവാസി സെൽ (SPC) & ലീഗൽ സെൽ സംയുക്ത സുരക്ഷാ പദ്ധതി.", tier: "global", status: "in-progress" },
       { id: 9010, sister: "elearn", title: "ഗ്ലോബൽ ഓൺലൈൻ മദ്റസാ ഇ-ലേണിംഗ് അഡ്മിഷൻ ഡ്രൈവ്", wing: "ട്രെൻഡ്", desc: "വിദേശത്ത് വളരുന്ന പ്രവാസി കുട്ടികൾക്ക് ഏകീകൃത സിലബസിൽ ഓൺലൈൻ വിദ്യാഭ്യാസം.", tier: "global", status: "pending" },
       { id: 9001, sister: "skju", title: "സുപ്രഭാതം ദിനപത്ര സ്പോൺസർഷിപ്പ് & പ്രചാരണ കാമ്പയിൻ", wing: "മീഡിയ", desc: "പള്ളികളിലും വായനശാലകളിലും സുപ്രഭാതം ദിനപത്രം എത്തിക്കൽ.", tier: "unit", status: "in-progress" },
@@ -1003,21 +1001,24 @@
     ];
 
     const STANDARD_COMMITTEE_DESIGNATIONS = [
-      { id: "pres", desig: "പ്രസിഡന്റ്", role: "core", wing: "കോർ കമ്മിറ്റി", name: "മുഹമ്മദ് ആദിൽ", pin: "1001" },
-      { id: "sec", desig: "ജനറൽ സെക്രട്ടറി", role: "core", wing: "കോർ കമ്മിറ്റി", name: "നിസാർ കെ. കെ", pin: "1002" },
-      { id: "wsec", desig: "വർക്കിംഗ് സെക്രട്ടറി", role: "core", wing: "കോർ കമ്മിറ്റി", name: "മുഹ്സിൻ പി. എം", pin: "1003" },
-      { id: "tres", desig: "ട്രഷറർ", role: "core", wing: "കോർ കമ്മിറ്റി", name: "വി. ബി. റമീസ് ബാഖവി", pin: "1004" },
-      { id: "coun1", desig: "മേഖലാ കൗൺസിലർ 1", role: "core", wing: "ഇബാദ്", name: "എ. എം. മുഹമ്മദ് സഈദ് ബാഖവി", pin: "1005" },
-      { id: "coun2", desig: "മേഖലാ കൗൺസിലർ 2", role: "core", wing: "വിഖായ", name: "അൻസിൽ വി. എ", pin: "1006" },
-      { id: "vp1", desig: "വൈസ് പ്രസിഡന്റ് (സഹചാരി)", role: "executive", wing: "സഹചാരി", name: "മുഹമ്മദ് സഫീർ ആർ. എം", pin: "2001" },
-      { id: "vp2", desig: "വൈസ് പ്രസിഡന്റ് (ട്രെൻഡ്)", role: "executive", wing: "ട്രെൻഡ്", name: "അബ്ദുൽ ലത്തീഫ്", pin: "2002" },
-      { id: "conv_media", desig: "മീഡിയ കൺവീനർ", role: "executive", wing: "മീഡിയ & സൈബർ", name: "റൈഹാൻ ബഷീർ", pin: "2007" },
-      { id: "conv_sarg", desig: "സർഗലയം കൺവീനർ", role: "executive", wing: "സർഗലയം", name: "മുഹമ്മദ് ഹാറൂൺ പി. എ", pin: "2008" },
-      { id: "conv_twal", desig: "ത്വലബ കൺവീനർ", role: "executive", wing: "ത്വലബ", name: "മുഹമ്മദ് സഫ്‌വാൻ എം. സി", pin: "2009" }
+      { id: "pres", desig: "പ്രസിഡന്റ്", role: "core", wing: "കോർ കമ്മിറ്റി", name: "പ്രസിഡന്റ്", pin: "1001" },
+      { id: "sec", desig: "ജനറൽ സെക്രട്ടറി", role: "core", wing: "കോർ കമ്മിറ്റി", name: "ജനറൽ സെക്രട്ടറി", pin: "1002" },
+      { id: "wsec", desig: "വർക്കിംഗ് സെക്രട്ടറി", role: "core", wing: "കോർ കമ്മിറ്റി", name: "വർക്കിംഗ് സെക്രട്ടറി", pin: "1003" },
+      { id: "tres", desig: "ട്രഷറർ", role: "core", wing: "കോർ കമ്മിറ്റി", name: "ട്രഷറർ", pin: "1004" },
+      { id: "vp1", desig: "വൈസ് പ്രസിഡന്റ് (സഹചാരി & റിലീഫ്)", role: "executive", wing: "സഹചാരി", name: "വൈസ് പ്രസിഡന്റ് 1", pin: "2001" },
+      { id: "vp2", desig: "വൈസ് പ്രസിഡന്റ് (വിദ്യാഭ്യാസം & ട്രെൻഡ്)", role: "executive", wing: "ട്രെൻഡ്", name: "വൈസ് പ്രസിഡന്റ് 2", pin: "2002" },
+      { id: "jsec1", desig: "ജോയിന്റ് സെക്രട്ടറി (സംഘടനാ ശാക്തീകരണം)", role: "executive", wing: "ഓർഗാനെറ്റ്", name: "ജോയിന്റ് സെക്രട്ടറി 1", pin: "2003" },
+      { id: "jsec2", desig: "ജോയിന്റ് സെക്രട്ടറി (മീഡിയ & ഐടി)", role: "executive", wing: "മീഡിയ & സൈബർ", name: "ജോയിന്റ് സെക്രട്ടറി 2", pin: "2004" },
+      { id: "conv_viqaya", desig: "വിഖായ കൺവീനർ", role: "executive", wing: "വിഖായ", name: "വിഖായ കൺവീനർ", pin: "2005" },
+      { id: "conv_ibad", desig: "ഇബാദ് കൺവീനർ", role: "executive", wing: "ഇബാദ്", name: "ഇബാദ് കൺവീനർ", pin: "2006" },
+      { id: "conv_isthiqama", desig: "ഇസ്തിഖാമ കൺവീനർ", role: "executive", wing: "ഇസ്തിഖാമ", name: "ഇസ്തിഖാമ കൺവീനർ", pin: "2007" },
+      { id: "conv_sarg", desig: "സർഗലയം കൺവീനർ", role: "executive", wing: "സർഗലയം", name: "സർഗലയം കൺവീനർ", pin: "2008" },
+      { id: "conv_twal", desig: "ത്വലബ കൺവീനർ", role: "executive", wing: "ത്വലബ", name: "ത്വലബ കൺവീനർ", pin: "2009" },
+      { id: "conv_maneesha", desig: "മനീഷ കൺവീനർ", role: "executive", wing: "മനീഷ", name: "മനീഷ കൺവീനർ", pin: "2010" }
     ];
 
-    let currentUnitId = "arangadi";
-    let activeUnitData = { id: "arangadi", name: "ഓർഗനൈസേഷൻ പോർട്ടൽ", region: "യൂണിറ്റ് കമ്മിറ്റി", portalLink: window.location.href };
+    let currentUnitId = "model_unit";
+    let activeUnitData = { id: "model_unit", name: "ഓർഗനൈസേഷൻ പോർട്ടൽ", region: "മാതൃകാ ഘടകം (State Demo)", portalLink: window.location.href };
     let activeLeadersList = [...STANDARD_COMMITTEE_DESIGNATIONS];
     let allCustomTasks = [];
     let currentTierLevel = 'unit';
@@ -1668,7 +1669,7 @@
     function populateUnitGateSelector() {
       const sel = document.getElementById('gate-unit-select');
       if (!sel) return;
-      sel.innerHTML = `<option value="arangadi">ആറങ്ങാടി ഘടകം</option><option value="new">➕ പുതിയ ഘടകം നിർമ്മിക്കുക (Build New)</option>`;
+      sel.innerHTML = `<option value="model_unit">മാതൃകാ ഘടകം (State Demo)</option><option value="new">➕ പുതിയ ഘടകം നിർമ്മിക്കുക (Build New)</option>`;
     }
 
     function onGateUnitSelectionChange() {
