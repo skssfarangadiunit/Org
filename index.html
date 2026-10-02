@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SKSSF & സമസ്ത ഓർഗനൈസേഷൻ പോർട്ടൽ | National to Unit Network</title>
+  <title>ഓർഗനൈസേഷൻ പോർട്ടൽ | Organizational Management & Action Network</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Manrope:wght@500;600;700;800&family=Noto+Sans+Malayalam:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -333,24 +333,24 @@
   <!-- AUTH GATE SCREEN -->
   <div id="auth-gate-screen">
     <div class="auth-card">
-      <span class="auth-badge" id="gate-unit-badge">SKSSF & സമസ്ത ഓർഗനൈസേഷൻ പോർട്ടൽ</span>
+      <span class="auth-badge" id="gate-unit-badge">ഓർഗനൈസേഷൻ പോർട്ടൽ (Organization Portal)</span>
       <h2 id="gate-unit-title">പ്രവേശന കവാടം (Access Portal)</h2>
-      <p class="auth-desc">നാഷണൽ, സ്റ്റേറ്റ്, ഡിസ്ട്രിക്റ്റ്, മേഖല, യൂണിറ്റ് പ്രവർത്തനങ്ങൾ ഏകോപിപ്പിക്കാൻ റോൾ കോഡ് നൽകുക</p>
+      <p class="auth-desc">ഘടകങ്ങൾ ഏകോപിപ്പിക്കാനും ആക്ഷൻ പ്ലാനുകൾ നിയന്ത്രിക്കാനും റോൾ കോഡ് നൽകുക</p>
 
       <!-- UNIT SELECTOR / SWITCHER -->
       <div class="unit-switch-box">
-        <label>🏢 ഘടകം / യൂണിറ്റ് തെരഞ്ഞെടുക്കുക:</label>
+        <label>🏢 ഘടകം / പ്രൊഫൈൽ തെരഞ്ഞെടുക്കുക:</label>
         <select id="gate-unit-select" class="unit-select-control" onchange="onGateUnitSelectionChange()"></select>
       </div>
 
       <div class="pin-input-wrapper">
-        <input type="password" id="gate-pin-input" class="auth-input" placeholder="••••" maxlength="8" autocomplete="off" autofocus>
+        <input type="password" id="gate-pin-input" class="auth-input" placeholder="••••" maxlength="8" autocomplete="off" autofocus onkeydown="if(event.key==='Enter') attemptUnlock()">
         <button type="button" class="btn-toggle-eye" onclick="togglePinVisibility()">കാണിക്കുക</button>
       </div>
 
       <button onclick="attemptUnlock()" class="auth-btn">പ്രവേശിക്കുക (Login)</button>
-      <button onclick="unlockAsGuest()" class="guest-btn">പൊതുജനങ്ങൾ / ഗസ്റ്റ് പ്രവേശനം (Guest View)</button>
-      <button onclick="openNewUnitModal()" class="btn-new-unit">➕ പുതിയ യൂണിറ്റ് / ഘടകം സജ്ജീകരിക്കുക (Setup New Unit)</button>
+      <button onclick="unlockAsGuest()" class="guest-btn">പൊതുജന / ഗസ്റ്റ് പ്രവേശനം (Guest View)</button>
+      <button onclick="openNewUnitModal()" class="btn-new-unit">➕ പുതിയ ഘടകം നിർമ്മിക്കുക (Build / Setup Organization)</button>
 
       <div id="auth-error-msg" class="auth-error">തെറ്റായ കോഡ്! ദയവായി ശരിയായ കോഡ് നൽകുക.</div>
     </div>
@@ -361,8 +361,8 @@
     <header>
       <div class="header-container">
         <div class="brand">
-          <h1 id="app-header-title">SKSSF ആറങ്ങാടി യൂണിറ്റ്</h1>
-          <p id="app-header-sub">നാഷണൽ – സ്റ്റേറ്റ് – ഡിസ്ട്രിക്റ്റ് – മേഖലാ – യൂണിറ്റ് നെറ്റ്വർക്ക് & കമ്മ്യൂണിറ്റി പോർട്ടൽ</p>
+          <h1 id="app-header-title">ഓർഗനൈസേഷൻ പോർട്ടൽ</h1>
+          <p id="app-header-sub">ആക്ഷൻ പ്ലാനർ & കമ്മ്യൂണിറ്റി കോർഡിനേഷൻ നെറ്റ്വർക്ക്</p>
         </div>
         <div class="header-controls">
           <span id="user-role-badge" class="tier-badge">കോർ കമ്മിറ്റി (Admin)</span>
@@ -1377,8 +1377,11 @@
 
     // WHATSAPP SHARE SHORTCUTS FOR COMMUNITY CARDS
     function shareJobDeskWA() {
+      let msg = `*${activeUnitData.name} - ജോബ് ഡെസ്ക്*\n💼 *തൊഴിൽ അവസരങ്ങൾ & അന്വേഷണം*\n━━━━━━━━━━━━━━━━━━━━━\n\n${communityServices.filter(s => s.category === 'job').map(i => `• *${i.title}*\n  > ${i.details}`).join('\n\n')}\n\n` + getAttributionFooter();
+      window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`, '_blank');
+    }
     function sharePravasiDeskWA() {
-      let msg = `*${activeUnitData.name} - സമസ്ത ഗ്ലോബൽ പ്രവാസി ഡെസ്ക്*\n🌍 *SIC & പ്രവാസി ക്ഷേമ സേവനങ്ങൾ*\n━━━━━━━━━━━━━━━━━━━━━\n\n• *സമസ്ത ഇസ്‌ലാമിക് സെന്റർ (SIC):* ഗൾഫ്-വിദേശ രാജ്യങ്ങളിലെ മലയാളികൾക്കും അന്യദേശക്കാർക്കുമായി പ്രവർത്തിക്കുന്ന ആഗോള കേന്ദ്രം.\n• *സമസ്ത ഇ-ലേണിംഗ് (Global Madrasa):* ലോകത്തെവിടെയും ഇരുന്നുകൊണ്ട് കുട്ടികൾക്ക് സമസ്ത സിലബസിൽ ഓൺലൈൻ മദ്റസാ വിദ്യാഭ്യാസം.\n• *പ്രവാസി ലീഗൽ എയ്ഡ് & ക്ഷേമനിധി:* അടിയന്തിര നിയമസഹായം, പ്രവാസി പെൻഷൻ വിവരങ്ങൾ, നാട്ടിലെ പുനരധിവാസം.\n\nആവശ്യമുള്ള പ്രവാസി സഹോദരങ്ങൾ ബന്ധപ്പെടുക.\n\n` + getAttributionFooter();
+      let msg = `*${activeUnitData.name} - പ്രവാസി ക്ഷേമ ഡെസ്ക്*\n🌍 *പ്രവാസി സഹായ സേവനങ്ങൾ*\n━━━━━━━━━━━━━━━━━━━━━\n\n• *പ്രവാസി നെറ്റ്വർക്കിംഗ്:* വിദേശ രാജ്യങ്ങളിലുള്ള പ്രവാസി കൂട്ടായ്മകളുമായി ഏകോപനം.\n• *ഇ-ലേണിംഗ്:* പ്രവാസി കുട്ടികൾക്ക് ഓൺലൈൻ വിദ്യാഭ്യാസം.\n• *ലീഗൽ എയ്ഡ് & ക്ഷേമം:* അടിയന്തിര നിയമസഹായം, നാട്ടിലെ പുനരധിവാസം.\n\nആവശ്യമുള്ള പ്രവാസി സഹോദരങ്ങൾ ബന്ധപ്പെടുക.\n\n` + getAttributionFooter();
       window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`, '_blank');
     }
     function shareMatrimonyDeskWA() {
@@ -1625,16 +1628,55 @@
 
     // 18. AUTHENTICATION & LOCK
     function attemptUnlock() {
-      const val = document.getElementById('gate-pin-input').value.trim();
+      const pinInput = document.getElementById('gate-pin-input');
+      if (!pinInput) return;
+      const val = pinInput.value.trim();
       const matched = activeLeadersList.find(l => l.pin === val);
-      if (matched || val === "1989") {
-        currentUserRole = matched ? matched.role : "core";
-        loggedInUserTitle = matched ? `${matched.desig} (${matched.name})` : "കോർ കമ്മിറ്റി അഡ്മിൻ";
+      if (matched || val === "1989" || val === "2222" || val === "3333") {
+        document.getElementById('auth-error-msg').style.display = "none";
+        currentUserRole = matched ? matched.role : (val === "2222" ? "executive" : (val === "3333" ? "members" : "core"));
+        loggedInUserTitle = matched ? `${matched.desig} (${matched.name})` : (val === "2222" ? "എക്സിക്യൂട്ടീവ് കൗൺസിൽ" : (val === "3333" ? "അംഗം" : "അഡ്മിൻ"));
         unlockInterface();
         showToast(`${loggedInUserTitle} ആയി പ്രവേശിച്ചു!`);
       } else {
-        document.getElementById('auth-error-msg').style.display = "block";
+        const err = document.getElementById('auth-error-msg');
+        if (err) err.style.display = "block";
       }
+    }
+
+    function unlockAsGuest() {
+      currentUserRole = "public";
+      loggedInUserTitle = "പൊതുജന സന്ദർശകൻ";
+      unlockInterface();
+      showToast("ഗസ്റ്റ് മോഡിൽ പ്രവേശിച്ചു (Read-Only)!");
+    }
+
+    function unlockInterface() {
+      document.getElementById('auth-gate-screen').style.display = 'none';
+      document.getElementById('app-container').classList.remove('hidden');
+      const rb = document.getElementById('user-role-badge');
+      if (rb) rb.innerText = loggedInUserTitle;
+      initApp();
+    }
+
+    function lockInterface() {
+      document.getElementById('auth-gate-screen').style.display = 'flex';
+      document.getElementById('app-container').classList.add('hidden');
+      const pinInput = document.getElementById('gate-pin-input');
+      if (pinInput) { pinInput.value = ''; pinInput.focus(); }
+    }
+
+    function togglePinVisibility() {
+      const p = document.getElementById('gate-pin-input');
+      if (p) p.type = p.type === 'password' ? 'text' : 'password';
+    }
+
+    // 19. UNIT SWITCHER & NEW UNIT CREATION
+    function populateUnitGateSelector() {
+      const sel = document.getElementById('gate-unit-select');
+      if (!sel) return;
+      sel.innerHTML = `<option value="arangadi">ആറങ്ങാടി ഘടകം</option><option value="new">+ പുതിയ ഘടകം നിർമ്മിക്കുക (Build New)</option>`;
+    }
     }
 
     function unlockAsGuest() {
