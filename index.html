@@ -1,0 +1,1734 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SKSSF & സമസ്ത ഓർഗനൈസേഷൻ പോർട്ടൽ | National to Unit Network</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Manrope:wght@500;600;700;800&family=Noto+Sans+Malayalam:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #047857;
+      --primary-dark: #065f46;
+      --primary-light: #ecfdf5;
+      --accent: #0284c7;
+      --indigo: #4f46e5;
+      --danger: #dc2626;
+      --warning: #d97706;
+      --purple: #7c3aed;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --wa-green: #25d366;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { width: 100%; max-width: 100vw; overflow-x: hidden; scroll-behavior: smooth; }
+    body {
+      font-family: 'Noto Sans Malayalam', 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
+      line-height: 1.55;
+      padding-bottom: 90px;
+    }
+
+    /* AUTH GATE SCREEN */
+    #auth-gate-screen {
+      position: fixed; inset: 0; background: #0f172a;
+      display: flex; align-items: center; justify-content: center;
+      padding: 16px; z-index: 99999;
+    }
+    .auth-card {
+      background: #ffffff; width: 100%; max-width: min(100%, 480px);
+      border-radius: 20px; padding: 24px 20px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); text-align: center;
+    }
+    .auth-badge {
+      display: inline-block; background: #ecfdf5; color: #065f46;
+      padding: 5px 14px; border-radius: 999px; font-size: 12px; font-weight: 800; margin-bottom: 12px;
+    }
+    .auth-card h2 { font-size: 19px; font-weight: 800; color: #0f172a; margin-bottom: 4px; }
+    .auth-card p.auth-desc { font-size: 12.5px; color: #64748b; margin-bottom: 14px; line-height: 1.45; }
+    
+    .unit-switch-box {
+      background: #f1f5f9; border: 1.5px solid #cbd5e1; border-radius: 10px;
+      padding: 10px; margin-bottom: 14px; text-align: left;
+    }
+    .unit-switch-box label { font-size: 11.5px; font-weight: 700; color: #334155; display: block; margin-bottom: 4px; }
+    .unit-select-control {
+      width: 100%; padding: 8px 10px; border-radius: 6px; border: 1.5px solid #94a3b8;
+      font-size: 13px; font-weight: 700; color: #0f172a; background: #fff; outline: none;
+    }
+
+    .pin-input-wrapper { position: relative; margin-bottom: 12px; }
+    .auth-input {
+      width: 100%; padding: 12px 60px 12px 18px; border-radius: 10px;
+      border: 2px solid #cbd5e1; font-size: 22px; text-align: center; letter-spacing: 6px;
+      font-weight: 800; outline: none; transition: all 0.2s; background: #f8fafc; color: #0f172a;
+    }
+    .auth-input:focus { background: #ffffff; border-color: #047857; box-shadow: 0 0 0 3px rgba(4, 120, 87, 0.18); }
+    .btn-toggle-eye {
+      position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+      background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px;
+      color: #475569; font-size: 11px; font-weight: 700; cursor: pointer; padding: 5px 8px;
+    }
+    .auth-btn {
+      width: 100%; background: #047857; color: #ffffff; padding: 11px 16px;
+      border-radius: 10px; border: none; font-size: 13.5px; font-weight: 700;
+      cursor: pointer; margin-bottom: 8px; transition: background 0.2s;
+    }
+    .auth-btn:hover { background: #065f46; }
+    .guest-btn {
+      width: 100%; background: transparent; color: #64748b; padding: 9px 14px;
+      border-radius: 10px; border: 1px solid #cbd5e1; font-size: 12px; font-weight: 700; cursor: pointer;
+      margin-bottom: 8px;
+    }
+    .guest-btn:hover { background: #f1f5f9; color: #0f172a; }
+    .btn-new-unit {
+      background: #eff6ff; color: #1d4ed8; border: 1px dashed #3b82f6; width: 100%;
+      padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: 800; cursor: pointer;
+    }
+    .auth-error {
+      color: #dc2626; font-size: 12px; font-weight: 600; margin-top: 8px; display: none;
+      background: #fef2f2; padding: 8px 12px; border-radius: 8px; border: 1px solid #fecaca;
+    }
+
+    /* HEADER */
+    header {
+      background: linear-gradient(135deg, #065f46 0%, #047857 50%, #0f766e 100%);
+      color: #ffffff; padding: 12px 16px; position: sticky; top: 0; z-index: 50;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12); width: 100%;
+    }
+    .header-container {
+      max-width: 1280px; margin: 0 auto; display: flex; flex-wrap: wrap;
+      justify-content: space-between; align-items: center; gap: 10px; width: 100%;
+    }
+    .brand { min-width: 0; }
+    .brand h1 { font-size: 17px; font-weight: 800; line-height: 1.25; }
+    .brand p { font-size: 11px; color: #a7f3d0; }
+    .header-controls { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .tier-badge {
+      background: rgba(255, 255, 255, 0.2); border: 1px solid rgba(255, 255, 255, 0.35);
+      padding: 4px 10px; border-radius: 999px; font-size: 11.5px; font-weight: 700; color: #ffffff;
+      white-space: nowrap;
+    }
+    .btn-header {
+      background: rgba(15, 23, 42, 0.4); border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 5px 10px; border-radius: 999px; font-size: 11.5px; color: #fff;
+      cursor: pointer; font-weight: 700; transition: background 0.15s ease;
+      display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; text-decoration: none;
+    }
+    .btn-header:hover { background: rgba(15, 23, 42, 0.7); }
+
+    /* MAIN CONTAINER */
+    main {
+      max-width: 1280px; margin: 14px auto; padding: 0 12px;
+      display: flex; flex-direction: column; gap: 14px; width: 100%;
+    }
+
+    /* SPOTLIGHT BANNER */
+    .today-banner {
+      background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 50%, #e0f2fe 100%);
+      border: 1.5px solid #86efac; border-radius: 14px; padding: 14px 16px;
+      display: flex; flex-direction: column; gap: 10px; width: 100%;
+      box-shadow: 0 2px 8px rgba(4, 120, 87, 0.05);
+    }
+    @media (min-width: 640px) {
+      .today-banner { flex-direction: row; justify-content: space-between; align-items: center; }
+    }
+    .today-badge-chip {
+      background: #047857; color: #fff; padding: 3px 10px; border-radius: 999px;
+      font-size: 11px; font-weight: 800; display: inline-flex; align-items: center; gap: 4px;
+    }
+
+    /* HIERARCHY SELECTOR & COLLAB BAR */
+    .hierarchy-nav-card {
+      background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px;
+      padding: 12px 14px; display: flex; flex-direction: column; gap: 10px; width: 100%;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+    }
+    .hierarchy-level-pills {
+      display: flex; gap: 6px; overflow-x: auto; max-width: 100%;
+      scrollbar-width: none; -webkit-overflow-scrolling: touch;
+    }
+    .level-pill-btn {
+      padding: 6px 12px; border-radius: 8px; border: 1.5px solid #cbd5e1;
+      background: #f8fafc; font-size: 12px; font-weight: 700; color: #334155;
+      cursor: pointer; transition: all 0.2s ease; white-space: nowrap;
+      display: inline-flex; align-items: center; gap: 4px;
+    }
+    .level-pill-btn.active {
+      background: #047857; color: #ffffff; border-color: #047857;
+      box-shadow: 0 2px 6px rgba(4, 120, 87, 0.25);
+    }
+    .level-pill-btn.pill-national.active { background: #b91c1c; border-color: #b91c1c; }
+    .level-pill-btn.pill-state.active { background: #4f46e5; border-color: #4f46e5; }
+    .level-pill-btn.pill-district.active { background: #0284c7; border-color: #0284c7; }
+
+    /* COLLAB / SISTER WINGS STRIP */
+    .collab-wings-strip {
+      display: flex; gap: 6px; overflow-x: auto; padding-top: 4px;
+      border-top: 1px dashed #cbd5e1; scrollbar-width: none;
+    }
+    .collab-chip {
+      background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px;
+      padding: 4px 8px; font-size: 11px; font-weight: 700; color: #334155;
+      cursor: pointer; white-space: nowrap; transition: all 0.15s;
+    }
+    .collab-chip:hover, .collab-chip.active { background: #ecfdf5; border-color: #047857; color: #047857; }
+
+    /* SCOPE & CALENDAR BAR */
+    .filter-panel {
+      background: #ffffff; border: 1px solid var(--border); border-radius: 14px;
+      padding: 12px 14px; display: flex; flex-wrap: wrap; justify-content: space-between;
+      align-items: center; gap: 10px; width: 100%;
+    }
+    .filter-controls-wrap { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; width: 100%; }
+    @media (min-width: 768px) { .filter-controls-wrap { width: auto; } }
+    .select-dropdown, .year-dropdown, .month-dropdown {
+      padding: 6px 10px; border-radius: 8px; border: 1.5px solid #cbd5e1;
+      background: #ffffff; font-size: 12px; font-weight: 700; color: #1e293b; outline: none;
+    }
+
+    /* METRICS STRIP */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 140px), 1fr));
+      gap: 10px; width: 100%;
+    }
+    .metric-card {
+      background: #ffffff; border: 1px solid var(--border); border-radius: 12px;
+      padding: 10px 12px; display: flex; align-items: center; gap: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02); position: relative; overflow: hidden; min-width: 0;
+    }
+    .metric-card::before { content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 4px; }
+    .metric-card.card-total::before { background: #0284c7; }
+    .metric-card.card-done::before { background: #16a34a; }
+    .metric-card.card-progress::before { background: #ca8a04; }
+    .metric-card.card-pending::before { background: #dc2626; }
+    .metric-data h3 { font-size: 17px; font-weight: 800; line-height: 1.1; }
+    .metric-data p { font-size: 10.5px; color: var(--text-muted); font-weight: 700; }
+
+    /* NAVIGATION TABS */
+    .tabs-bar {
+      display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px;
+      border-bottom: 2px solid var(--border); scrollbar-width: thin;
+      width: 100%; -webkit-overflow-scrolling: touch;
+    }
+    .tab-btn {
+      padding: 7px 12px; border-radius: 8px; font-size: 12px; font-weight: 700;
+      cursor: pointer; border: 1px solid var(--border); background: #ffffff;
+      color: var(--text-muted); transition: all 0.2s ease; white-space: nowrap;
+      display: flex; align-items: center; gap: 5px; flex-shrink: 0;
+    }
+    .tab-btn.active {
+      background: var(--primary); color: #ffffff; border-color: var(--primary);
+      box-shadow: 0 2px 6px rgba(4, 120, 87, 0.25);
+    }
+    .tab-btn.tab-escalate.active { background: #dc2626; border-color: #dc2626; }
+    .tab-btn.tab-community.active { background: #0284c7; border-color: #0284c7; }
+    .tab-btn.tab-collab.active { background: #4f46e5; border-color: #4f46e5; }
+
+    /* CONTENT CARD */
+    .content-card {
+      background: var(--card-bg); border-radius: 16px; border: 1px solid var(--border);
+      padding: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); width: 100%;
+    }
+    @media (min-width: 640px) { .content-card { padding: 20px; } }
+    .card-header {
+      display: flex; flex-direction: column; align-items: flex-start; gap: 12px;
+      margin-bottom: 14px; border-bottom: 1px solid var(--border); padding-bottom: 12px; width: 100%;
+    }
+    @media (min-width: 768px) { .card-header { flex-direction: row; justify-content: space-between; align-items: flex-start; } }
+    .card-title h2 { font-size: 16px; font-weight: 800; color: var(--text-main); }
+    .card-title p { font-size: 12px; color: var(--text-muted); }
+
+    .btn-copy, .btn-whatsapp, .btn-action {
+      border: none; padding: 7px 12px; border-radius: 8px; font-size: 12px;
+      font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; text-decoration: none;
+    }
+    .btn-copy { background: var(--primary); color: #fff; }
+    .btn-whatsapp { background: var(--wa-green); color: #fff; }
+    .btn-action { background: #0284c7; color: #fff; }
+
+    .msg-box {
+      background: #0b141a; color: #d1d7db; border-radius: 12px; padding: 14px;
+      font-family: 'SF Pro Text', Consolas, Monaco, monospace; font-size: 12.5px; line-height: 1.6;
+      white-space: pre-wrap; word-break: break-word; overflow-x: auto; max-height: 420px;
+      border: 1px solid #202c33; margin-bottom: 16px; user-select: all; width: 100%;
+    }
+
+    /* IDEA / SUGGESTION / UPVOTE CARDS */
+    .idea-card {
+      background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 12px;
+      padding: 14px; margin-bottom: 10px; display: flex; flex-direction: column; gap: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+    }
+    @media(min-width: 640px) {
+      .idea-card { flex-direction: row; justify-content: space-between; align-items: center; }
+    }
+    .upvote-box {
+      display: flex; align-items: center; gap: 8px; flex-shrink: 0;
+    }
+    .btn-upvote {
+      background: #f1f5f9; border: 1.5px solid #cbd5e1; border-radius: 8px;
+      padding: 6px 12px; font-size: 12px; font-weight: 800; color: #334155;
+      cursor: pointer; display: flex; align-items: center; gap: 4px; transition: all 0.2s;
+    }
+    .btn-upvote.voted { background: #dcfce7; border-color: #16a34a; color: #16a34a; }
+    .escalated-badge {
+      background: #fee2e2; color: #991b1b; padding: 3px 8px; border-radius: 6px;
+      font-size: 11px; font-weight: 800; border: 1px solid #fca5a5;
+    }
+
+    /* COMMUNITY SERVICE CARDS */
+    .service-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+      gap: 12px; margin-top: 10px;
+    }
+    .service-item-card {
+      background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px;
+      padding: 14px; display: flex; flex-direction: column; gap: 8px;
+    }
+    .service-badge {
+      display: inline-block; padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 800;
+    }
+
+    /* MODAL */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7);
+      display: flex; align-items: center; justify-content: center;
+      padding: 16px; z-index: 99999; backdrop-filter: blur(2px);
+    }
+    .modal-card {
+      background: #ffffff; width: 100%; max-width: min(100%, 540px);
+      border-radius: 16px; padding: 20px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+      max-height: 90vh; overflow-y: auto;
+    }
+    .modal-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 14px; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px;
+    }
+    .modal-close-btn { background: transparent; border: none; font-size: 20px; cursor: pointer; color: #64748b; }
+    .form-group { margin-bottom: 12px; }
+    .form-group label { display: block; font-size: 12px; font-weight: 700; margin-bottom: 4px; color: #334155; }
+    .form-control {
+      width: 100%; padding: 8px 12px; border-radius: 8px; border: 1.5px solid #cbd5e1;
+      font-size: 12.5px; outline: none; background: #f8fafc; color: #0f172a;
+    }
+
+    #toast {
+      position: fixed; bottom: 20px; right: 20px; background: #0f172a; color: #ffffff;
+      padding: 10px 16px; border-radius: 10px; font-size: 12px; font-weight: 700;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.25); z-index: 999999; display: none;
+    }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+  <!-- AUTH GATE SCREEN -->
+  <div id="auth-gate-screen">
+    <div class="auth-card">
+      <span class="auth-badge" id="gate-unit-badge">SKSSF & സമസ്ത ഓർഗനൈസേഷൻ പോർട്ടൽ</span>
+      <h2 id="gate-unit-title">പ്രവേശന കവാടം (Access Portal)</h2>
+      <p class="auth-desc">നാഷണൽ, സ്റ്റേറ്റ്, ഡിസ്ട്രിക്റ്റ്, മേഖല, യൂണിറ്റ് പ്രവർത്തനങ്ങൾ ഏകോപിപ്പിക്കാൻ റോൾ കോഡ് നൽകുക</p>
+
+      <!-- UNIT SELECTOR / SWITCHER -->
+      <div class="unit-switch-box">
+        <label>🏢 ഘടകം / യൂണിറ്റ് തെരഞ്ഞെടുക്കുക:</label>
+        <select id="gate-unit-select" class="unit-select-control" onchange="onGateUnitSelectionChange()"></select>
+      </div>
+
+      <div class="pin-input-wrapper">
+        <input type="password" id="gate-pin-input" class="auth-input" placeholder="••••" maxlength="8" autocomplete="off" autofocus>
+        <button type="button" class="btn-toggle-eye" onclick="togglePinVisibility()">കാണിക്കുക</button>
+      </div>
+
+      <button onclick="attemptUnlock()" class="auth-btn">പ്രവേശിക്കുക (Login)</button>
+      <button onclick="unlockAsGuest()" class="guest-btn">പൊതുജനങ്ങൾ / ഗസ്റ്റ് പ്രവേശനം (Guest View)</button>
+      <button onclick="openNewUnitModal()" class="btn-new-unit">➕ പുതിയ യൂണിറ്റ് / ഘടകം സജ്ജീകരിക്കുക (Setup New Unit)</button>
+
+      <div id="auth-error-msg" class="auth-error">തെറ്റായ കോഡ്! ദയവായി ശരിയായ കോഡ് നൽകുക.</div>
+    </div>
+  </div>
+
+  <!-- MAIN APP WRAPPER -->
+  <div id="app-container" class="hidden">
+    <header>
+      <div class="header-container">
+        <div class="brand">
+          <h1 id="app-header-title">SKSSF ആറങ്ങാടി യൂണിറ്റ്</h1>
+          <p id="app-header-sub">നാഷണൽ – സ്റ്റേറ്റ് – ഡിസ്ട്രിക്റ്റ് – മേഖലാ – യൂണിറ്റ് നെറ്റ്വർക്ക് & കമ്മ്യൂണിറ്റി പോർട്ടൽ</p>
+        </div>
+        <div class="header-controls">
+          <span id="user-role-badge" class="tier-badge">കോർ കമ്മിറ്റി (Admin)</span>
+          <button onclick="openIdeaModal()" class="btn-header" style="background:#dc2626; border-color:#f87171;">💡 നിർദ്ദേശം നൽകുക</button>
+          <button onclick="openTaskModal()" id="btn-header-add-task" class="btn-header" style="background:#0284c7; border-color:#38bdf8;">➕ പുതിയ കർമ്മം</button>
+          <button onclick="lockInterface()" class="btn-header" style="background:rgba(225,29,72,0.4);">🔒 ലോക്ക്</button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div id="toast"><span id="toast-text">സന്ദേശം കോപ്പി ചെയ്തു!</span></div>
+
+      <!-- Spotlight Banner: Today's Significance -->
+      <div class="today-banner">
+        <div style="min-width:0; flex:1;">
+          <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:4px;">
+            <span class="today-badge-chip">🌟 തത്സമയ തീയതി & ദിനവിശേഷം</span>
+            <span id="live-today-fulldate" style="font-size:12.5px; font-weight:800; color:#065f46;">ഇന്ന് ലോഡ് ചെയ്യുന്നു...</span>
+          </div>
+          <div id="live-today-specialty" style="font-size:12px; color:#334155; line-height:1.5;">
+            ഇന്നത്തെ ആത്മീയ-ഭൗതിക ദിനവിശേഷങ്ങൾ കണ്ടെത്തുന്നു...
+          </div>
+        </div>
+        <div style="display:flex; gap:6px; flex-shrink:0; align-items:center; flex-wrap:wrap;">
+          <span id="active-horizon-indicator" style="background:#047857; color:#fff; padding:4px 10px; border-radius:8px; font-size:11.5px; font-weight:800;">
+            📅 ഈ മാസം
+          </span>
+        </div>
+      </div>
+
+      <!-- 7-TIER HIERARCHY SELECTOR & COLLAB SISTER ORGANISATIONS -->
+      <div class="hierarchy-nav-card">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
+          <span style="font-size:12.5px; font-weight:800; color:#0f172a;">🏛️ പ്രസ്ഥാന ഘടന തലം (Organizational Tier):</span>
+          <span id="active-tier-desc" style="font-size:11.5px; font-weight:700; color:#047857;">തലം: യൂണിറ്റ് കമ്മിറ്റി</span>
+        </div>
+        <div class="hierarchy-level-pills">
+          <button onclick="setTierLevel('global')" id="tier-pill-global" class="level-pill-btn pill-global" style="border-color:#0284c7; color:#0369a1;">🌍 0. ഗ്ലോബൽ കൗൺസിൽ (SIC / Pravasi)</button>
+          <button onclick="setTierLevel('national')" id="tier-pill-national" class="level-pill-btn pill-national">🇮🇳 1. നാഷണൽ കമ്മിറ്റി</button>
+          <button onclick="setTierLevel('state')" id="tier-pill-state" class="level-pill-btn pill-state">🌴 2. സംസ്ഥാന സമിതി</button>
+          <button onclick="setTierLevel('district')" id="tier-pill-district" class="level-pill-btn pill-district">🏢 3. ജില്ലാ കമ്മിറ്റി</button>
+          <button onclick="setTierLevel('mekhala')" id="tier-pill-mekhala" class="level-pill-btn">🕌 4. മേഖലാ / ക്ലസ്റ്റർ</button>
+          <button onclick="setTierLevel('unit')" id="tier-pill-unit" class="level-pill-btn active">🌱 5. യൂണിറ്റ് ഘടകം</button>
+          <button onclick="setTierLevel('subwings')" id="tier-pill-subwings" class="level-pill-btn">🛡️ 6. സബ് വിംഗുകൾ</button>
+          <button onclick="setTierLevel('members')" id="tier-pill-members" class="level-pill-btn">👥 7. മുഴുവൻ അംഗങ്ങൾ</button>
+        </div>
+
+        <!-- COLLABORATION WITH SISTER SAMASTHA BODIES -->
+        <div class="collab-wings-strip">
+          <span style="font-size:11px; font-weight:800; color:#64748b; align-self:center;">🤝 സമസ്ത പോഷക സഹകരണ ഘടകങ്ങൾ:</span>
+          <span onclick="filterCollabSister('all')" class="collab-chip active" id="collab-chip-all">എല്ലാം</span>
+          <span onclick="filterCollabSister('sic')" class="collab-chip" id="collab-chip-sic" style="background:#e0f2fe; color:#0369a1; font-weight:800;">🌍 SIC (ഗ്ലോബൽ ചാപ്റ്ററുകൾ)</span>
+          <span onclick="filterCollabSister('spc')" class="collab-chip" id="collab-chip-spc" style="background:#fef3c7; color:#92400e; font-weight:800;">✈️ SPC (പ്രവാസി സെൽ)</span>
+          <span onclick="filterCollabSister('elearn')" class="collab-chip" id="collab-chip-elearn">🌐 ഇ-ലേണിംഗ് (Global Madrasa)</span>
+          <span onclick="filterCollabSister('skju')" class="collab-chip" id="collab-chip-skju">SKJU (മാതൃസഭ)</span>
+          <span onclick="filterCollabSister('skimvb')" class="collab-chip" id="collab-chip-skimvb">SKIMVB (വിദ്യാഭ്യാസ ബോർഡ്)</span>
+          <span onclick="filterCollabSister('sys')" class="collab-chip" id="collab-chip-sys">SYS (യുവജന സംഘം)</span>
+          <span onclick="filterCollabSister('smf')" class="collab-chip" id="collab-chip-smf">SMF (മഹല്ല് ഫെഡറേഷൻ)</span>
+          <span onclick="filterCollabSister('skjmcc')" class="collab-chip" id="collab-chip-skjmcc">SKJMCC (മുഅല്ലിം കൗൺസിൽ)</span>
+          <span onclick="filterCollabSister('sksbv')" class="collab-chip" id="collab-chip-sksbv">SKSBV (ബാലവേദി)</span>
+          <span onclick="filterCollabSister('snec')" class="collab-chip" id="collab-chip-snec">SNEC / ASMI</span>
+        </div>
+      </div>
+
+      <!-- Scope & Perpetual Calendar Filter -->
+      <div class="filter-panel">
+        <div class="filter-controls-wrap">
+          <!-- Scope Pills -->
+          <div style="display:flex; gap:4px; align-items:center;">
+            <button onclick="setTimeHorizon('daily')" id="horizon-btn-daily" class="collab-chip">⚡ ഇന്ന്</button>
+            <button onclick="setTimeHorizon('weekly')" id="horizon-btn-weekly" class="collab-chip">🕌 ആഴ്ച</button>
+            <button onclick="setTimeHorizon('monthly')" id="horizon-btn-monthly" class="collab-chip active" style="background:#047857; color:#fff;">📅 മാസം</button>
+            <button onclick="setTimeHorizon('annual')" id="horizon-btn-annual" class="collab-chip">🏆 വാർഷികം</button>
+          </div>
+
+          <div style="display:flex; align-items:center; gap:5px;">
+            <select id="cal-year-select" onchange="onYearOrCalendarChange()" class="year-dropdown">
+              <option value="2026">2026 – 2027 (1448 – 1449)</option>
+              <option value="2027">2027 – 2028 (1449 – 1450)</option>
+              <option value="2028">2028 – 2029 (1450 – 1451)</option>
+              <option value="2029">2029 – 2030 (1451 – 1452)</option>
+              <option value="2030">2030 – 2031 (1452 – 1453)</option>
+            </select>
+          </div>
+
+          <div style="display:flex; align-items:center; gap:5px;">
+            <select id="hijri-month-select" onchange="onHijriMonthChange()" class="month-dropdown">
+              <option value="auto">🌟 ഇന്നത്തെ തീയതി (Auto)</option>
+              <option value="all">മുഴുവൻ വർഷം (All 12 Months)</option>
+              <option value="muharram">1. മുഹർറം</option>
+              <option value="safar">2. സഫർ</option>
+              <option value="rabi_al_awwal">3. റബീഉൽ അവ്വൽ</option>
+              <option value="rabi_al_akhir">4. റബീഉൽ ആഖിർ</option>
+              <option value="jumada_al_ula">5. ജുമാദൽ ഊലാ</option>
+              <option value="jumada_al_akhira">6. ജുമാദൽ ആഖിറ</option>
+              <option value="rajab">7. റജബ്</option>
+              <option value="shaban">8. ശഅ്ബാൻ</option>
+              <option value="ramadan">9. വിശുദ്ധ റമളാൻ</option>
+              <option value="shawwal">10. ശവ്വാൽ</option>
+              <option value="dhul_qadah">11. ദുൽഖഅ്ദ</option>
+              <option value="dhul_hijjah">12. ദുൽഹിജ്ജ</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:6px;">
+          <button onclick="openTaskModal()" class="btn-copy" style="font-size:11.5px; padding:6px 12px;">➕ പുതിയ കർമ്മം ചേർക്കുക</button>
+        </div>
+      </div>
+
+      <!-- Quick Metrics Strip -->
+      <div class="metrics-grid">
+        <div class="metric-card card-total">
+          <div class="metric-data"><h3 id="stat-scope-total">0</h3><p>ആകെ ടാസ്‌കുകൾ</p></div>
+        </div>
+        <div class="metric-card card-done">
+          <div class="metric-data"><h3 id="stat-scope-done">0</h3><p>പൂർത്തിയായവ (Done)</p></div>
+        </div>
+        <div class="metric-card card-progress">
+          <div class="metric-data"><h3 id="stat-scope-progress">0</h3><p>നടക്കുന്നവ (In-Progress)</p></div>
+        </div>
+        <div class="metric-card card-pending">
+          <div class="metric-data"><h3 id="stat-scope-pending">0</h3><p>ബാക്കിയുള്ളവ (Pending)</p></div>
+        </div>
+      </div>
+
+      <!-- Main Navigation Tabs -->
+      <div class="tabs-bar">
+        <button onclick="switchTab('analytics')" id="tab-analytics" class="tab-btn active">📊 പ്രോഗ്രസ് ഡാഷ്‌ബോർഡ്</button>
+        <button onclick="switchTab('escalate')" id="tab-escalate" class="tab-btn tab-escalate">🗳️ താഴെത്തട്ട് നിർദ്ദേശങ്ങളും അപ്‌വോട്ടും (Bottom-Up Ideas)</button>
+        <button onclick="switchTab('broadcast')" id="tab-broadcast" class="tab-btn">📢 മേൽത്തട്ട് നയങ്ങളും സർക്കുലറുകളും (Top-Down Directives)</button>
+        <button onclick="switchTab('community')" id="tab-community" class="tab-btn tab-community">🤝 കമ്മ്യൂണിറ്റി കെയർ & ശാക്തീകരണം (Welfare Hub)</button>
+        <button onclick="switchTab('subwings')" id="tab-subwings" class="tab-btn">🏢 സബ് വിംഗുകൾ & മിഷൻ</button>
+        <button onclick="switchTab('collab')" id="tab-collab" class="tab-btn tab-collab">🤝 സഹോദര സംഘടനകൾ (Collab)</button>
+        <button onclick="switchTab('individuals')" id="tab-individuals" class="tab-btn">👤 കമ്മിറ്റി സ്ഥാന ചുമതലകൾ</button>
+        <button onclick="switchTab('messages')" id="tab-messages" class="tab-btn">💬 വാട്സാപ്പ് സന്ദേശങ്ങൾ (Tier Messaging)</button>
+        <button onclick="switchTab('agenda')" id="tab-agenda" class="tab-btn">🗓️ മീറ്റിംഗ് അജണ്ട പ്ലാനർ</button>
+        <button onclick="switchTab('admin')" id="tab-admin" class="tab-btn" style="background:#f1f5f9; color:#475569;">👑 അഡ്മിൻ കൺട്രോൾ</button>
+        <button onclick="switchTab('settings')" id="tab-settings" class="tab-btn">⚙️ ക്രമീകരണങ്ങൾ</button>
+      </div>
+
+      <!-- TAB: PROGRESS ANALYTICS -->
+      <div id="view-analytics" class="content-card">
+        <div class="card-header">
+          <div class="card-title">
+            <h2>📊 കർമ്മപദ്ധതി പ്രോഗ്രസ് അനലിറ്റിക്സ്</h2>
+            <p>നാഷണൽ തലം മുതൽ യൂണിറ്റ് തലം വരെയുള്ള സമഗ്രമായ പുരോഗതി അവലോകനം</p>
+          </div>
+          <div>
+            <button onclick="openTaskModal()" class="btn-action">➕ ടാസ്ക് ചേർക്കുക</button>
+          </div>
+        </div>
+
+        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:14px; margin-bottom:14px;">
+          <h3 style="font-size:13.5px; font-weight:800; color:#065f46; margin-bottom:8px;">📝 നിലവിലെ തലത്തിലെ കർമ്മപദ്ധതികൾ (Checklist & Status)</h3>
+          <div id="all-tasks-container"></div>
+        </div>
+      </div>
+
+      <!-- TAB: BOTTOM-UP IDEAS & UPVOTE SYSTEM -->
+      <div id="view-escalate" class="content-card hidden">
+        <div class="card-header">
+          <div class="card-title">
+            <h2>🗳️ താഴെത്തട്ടിൽ നിന്നുള്ള നിർദ്ദേശങ്ങളും അപ്‌വോട്ടിംഗും (Democratic Escalation Engine)</h2>
+            <p>യൂണിറ്റ് തലത്തിൽ അംഗങ്ങൾ മുന്നോട്ടുവെക്കുന്ന ആശയങ്ങൾക്ക് 60%+ അപ്‌വോട്ട് ലഭിച്ചാൽ മേൽത്തട്ടിലേക്ക് (മേഖല ➔ ജില്ല ➔ സംസ്ഥാനം ➔ നാഷണൽ) ഓട്ടോമാറ്റിക്കായി എസ്കലേഷൻ ചെയ്യപ്പെടും!</p>
+          </div>
+          <div>
+            <button onclick="openIdeaModal()" class="btn-copy" style="background:#dc2626;">💡 പുതിയ നിർദ്ദേശം നൽകുക</button>
+          </div>
+        </div>
+
+        <div id="ideas-feed-container"></div>
+      </div>
+
+      <!-- TAB: TOP-DOWN DIRECTIVES & CIRCULARS -->
+      <div id="view-broadcast" class="content-card hidden">
+        <div class="card-header">
+          <div class="card-title">
+            <h2>📢 മേൽത്തട്ട് നയങ്ങളും സർക്കുലറുകളും (Top-Down Directives & Policies)</h2>
+            <p>നാഷണൽ, സംസ്ഥാന, ജില്ലാ കമ്മിറ്റികൾ താഴെത്തട്ടിലേക്ക് നൽകുന്ന ഔദ്യോഗിക ആഹ്വാനങ്ങളും നയരേഖകളും</p>
+          </div>
+          <div>
+            <button onclick="copyElementText('broadcast-msg-box', 'സർക്കുലർ കോപ്പി ചെയ്തു!')" class="btn-copy">കോപ്പി</button>
+            <a id="share-broadcast-wa" href="#" target="_blank" class="btn-whatsapp">വാട്സാപ്പ് ഷെയർ</a>
+          </div>
+        </div>
+        <div id="broadcast-msg-box" class="msg-box"></div>
+      </div>
+
+      <!-- TAB: COMMUNITY CARE & WELFARE (Job, Marriage, Microfinance, Blood Bank) -->
+      <div id="view-community" class="content-card hidden">
+        <div class="card-header">
+          <div class="card-title">
+            <h2>🤝 കമ്മ്യൂണിറ്റി കെയർ & ജനക്ഷേമ ശാക്തീകരണം (Welfare & Empowerment Hub)</h2>
+            <p>ജോലി അന്വേഷണം, മംഗല്യ വേദി, പലിശരഹിത വായ്പാ നിധി, 24x7 ബ്ലഡ് ബാങ്ക്, മെഡിക്കൽ ഉപകരണ ബാങ്ക്</p>
+          </div>
+          <div>
+            <button onclick="openServiceModal()" class="btn-action">➕ സഹായ അപേക്ഷ / എൻട്രി ചേർക്കുക</button>
+          </div>
+        </div>
+
+        <div class="service-grid">
+          <!-- JOB CONNECT -->
+          <div class="service-item-card" style="border-top:4px solid #0284c7;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <h4 style="font-size:13.5px; font-weight:800;">💼 ട്രെൻഡ് & ഗൾഫ് ജോബ് കണക്റ്റ്</h4>
+              <span class="service-badge" style="background:#e0f2fe; color:#0369a1;">Pravasi Desk</span>
+            </div>
+            <p style="font-size:11.5px; color:#64748b;">തൊഴിലന്വേഷകരായ യുവാക്കൾക്ക് നാട്ടിലെയും ഗൾഫിലെയും സ്ഥാപനങ്ങളിലെ ഒഴിവുകൾ കണ്ടെത്തി നൽകൽ.</p>
+            <div id="community-jobs-list" style="margin-top:6px; font-size:11.5px;"></div>
+            <button onclick="shareJobDeskWA()" class="btn-whatsapp" style="font-size:11px; padding:5px 10px; margin-top:auto;">📲 തൊഴിൽ വിവരങ്ങൾ ഷെയർ</button>
+          </div>
+
+          <!-- PRAVASI WELFARE & LEGAL AID -->
+          <div class="service-item-card" style="border-top:4px solid #0d9488;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <h4 style="font-size:13.5px; font-weight:800;">🌍 പ്രവാസി ക്ഷേമം & SIC കോർഡിനേഷൻ</h4>
+              <span class="service-badge" style="background:#ccfbf1; color:#0f766e;">ഗ്ലോബൽ വിംഗ്</span>
+            </div>
+            <p style="font-size:11.5px; color:#64748b;">പ്രവാസികളുടെ അടിയന്തിര പ്രശ്നങ്ങൾ, നിയമസഹായം (SLC), മൃതദേഹം നാട്ടിലെത്തിക്കൽ, പ്രവാസി പെൻഷൻ വിവരങ്ങൾ.</p>
+            <div id="community-pravasi-list" style="margin-top:6px; font-size:11.5px;">• <strong>SIC ഹെൽപ്പ്‌ലൈൻ:</strong> ജിസിസി രാജ്യങ്ങളിലെ ചാപ്റ്ററുകളുമായി ബന്ധപ്പെടാം.<br>• <strong>ഇ-ലേണിംഗ്:</strong> പ്രവാസി കുട്ടികൾക്ക് ഓൺലൈൻ മദ്റസാ പ്രവേശനം.</div>
+            <button onclick="sharePravasiDeskWA()" class="btn-whatsapp" style="font-size:11px; padding:5px 10px; margin-top:auto;">📲 ഗ്ലോബൽ പ്രവാസി ഡെസ്ക് ഷെയർ</button>
+          </div>
+
+          <!-- MARRIAGE DESK -->
+          <div class="service-item-card" style="border-top:4px solid #ea580c;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <h4 style="font-size:13.5px; font-weight:800;">💍 മംഗല്യ വേദി (Matrimonial Desk)</h4>
+              <span class="service-badge" style="background:#ffedd5; color:#c2410c;">രഹസ്യാത്മകം</span>
+            </div>
+            <p style="font-size:11.5px; color:#64748b;">നിർദ്ധനരായ യുവതീ-യുവാക്കൾക്ക് മാന്യമായ വിവാഹ ആലോചനകൾ കണ്ടെത്തുന്നതിന് തികച്ചും സൗജന്യവും രഹസ്യവുമായ സെൽ.</p>
+            <div id="community-marriage-list" style="margin-top:6px; font-size:11.5px;"></div>
+            <button onclick="shareMatrimonyDeskWA()" class="btn-whatsapp" style="font-size:11px; padding:5px 10px; margin-top:auto;">📲 മാട്രിമോണിയൽ ഹെൽപ്പ് ഡെസ്ക്</button>
+          </div>
+
+          <!-- INTEREST-FREE MICROFINANCE -->
+          <div class="service-item-card" style="border-top:4px solid #16a34a;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <h4 style="font-size:13.5px; font-weight:800;">💰 പലിശരഹിത നിധി & കുറി (Qardh Hasan)</h4>
+              <span class="service-badge" style="background:#dcfce7; color:#15803d;">സഹചാരി</span>
+            </div>
+            <p style="font-size:11.5px; color:#64748b;">ബ്ലേഡ് പലിശക്കാരുടെ ചൂഷണത്തിൽ നിന്ന് സാധാരണക്കാരെ രക്ഷിക്കാൻ ശരീഅത്ത് അധിഷ്ഠിത പലിശരഹിത ഹ്രസ്വകാല സഹായ നിധി.</p>
+            <div id="community-loan-list" style="margin-top:6px; font-size:11.5px;"></div>
+            <button onclick="shareLoanDeskWA()" class="btn-whatsapp" style="font-size:11px; padding:5px 10px; margin-top:auto;">📲 പലിശരഹിത നിധി അറിയിപ്പ്</button>
+          </div>
+
+          <!-- 24x7 BLOOD NETWORK -->
+          <div class="service-item-card" style="border-top:4px solid #dc2626;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <h4 style="font-size:13.5px; font-weight:800;">🩸 24x7 എമർജൻസി ബ്ലഡ് നെറ്റ്‌വർക്ക്</h4>
+              <span class="service-badge" style="background:#fee2e2; color:#991b1b;">വിഖായ</span>
+            </div>
+            <p style="font-size:11.5px; color:#64748b;">അടിയന്തിര ഘട്ടങ്ങളിൽ ആശുപത്രികളിലേക്ക് രക്തദാതാക്കളെ ഉടൻ എത്തിക്കാൻ സന്നദ്ധരായ വിഖായ വളണ്ടിയർ ഡാറ്റാബേസ്.</p>
+            <div id="community-blood-list" style="margin-top:6px; font-size:11.5px;"></div>
+            <button onclick="shareBloodDeskWA()" class="btn-whatsapp" style="font-size:11px; padding:5px 10px; margin-top:auto;">📲 എമർജൻസി ബ്ലഡ് ഹെൽപ്പ്‌ലൈൻ</button>
+          </div>
+
+          <!-- MEDICAL EQUIPMENT BANK -->
+          <div class="service-item-card" style="border-top:4px solid #7c3aed;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <h4 style="font-size:13.5px; font-weight:800;">♿ സൗജന്യ മെഡിക്കൽ ഉപകരണ ബാങ്ക്</h4>
+              <span class="service-badge" style="background:#f3e8ff; color:#6b21a8;">സഹചാരി</span>
+            </div>
+            <p style="font-size:11.5px; color:#64748b;">വീൽചെയർ, വാട്ടർ ബെഡ്, എയർ ബെഡ്, ഓക്സിജൻ സൗകര്യങ്ങൾ രോഗികൾക്ക് സൗജന്യമായി വീട്ടിലെത്തിച്ചു നൽകൽ.</p>
+            <div id="community-equipment-list" style="margin-top:6px; font-size:11.5px;"></div>
+            <button onclick="shareEquipmentDeskWA()" class="btn-whatsapp" style="font-size:11px; padding:5px 10px; margin-top:auto;">📲 ഉപകരണ ബാങ്ക് ഹെൽപ്പ്‌ലൈൻ</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: SISTER SAMASTHA COLLABORATIONS -->
+      <div id="view-collab" class="content-card hidden">
+        <div class="card-header">
+          <div class="card-title">
+            <h2>🤝 സമസ്ത പോഷക സംഘടനകളുമായുള്ള സംയുക്ത കർമ്മപദ്ധതികൾ (Joint Collaboration)</h2>
+            <p>മാതൃസഭ SKJU, വിദ്യാഭ്യാസ ബോർഡ് SKIMVB, SYS, SMF, ജംഇയ്യത്തുൽ മുഅല്ലിമീൻ, ബാലവേദി SKSBV എന്നിവരുമായി ചേർന്ന് നടത്താവുന്ന പദ്ധതികൾ</p>
+          </div>
+        </div>
+        <div id="collab-tasks-container"></div>
+      </div>
+
+      <!-- TAB: SUB-WINGS & MISSIONS -->
+      <div id="view-subwings" class="content-card hidden">
+        <div class="card-header">
+          <div class="card-title">
+            <h2>🛡️ സബ് വിംഗുകൾ & ശാശ്വത സംസ്ഥാന മിഷൻ</h2>
+            <p>വിഖായ, സഹചാരി, ട്രെൻഡ്, സർഗലയം, ഇബാദ്, ഇസ്തിഖാമ, മനീഷ, കാമ്പസ്, ത്വലബ, മീഡിയ, ഐ.എഫ്.സി</p>
+          </div>
+          <div style="display:flex; gap:6px; align-items:center;">
+            <select id="wing-select" onchange="renderWingView()" class="select-dropdown"></select>
+            <button onclick="shareSubwingFullProfileWA()" class="btn-whatsapp">📲 വിംഗ് വിവരങ്ങൾ ഷെയർ</button>
+          </div>
+        </div>
+        <div id="wing-msg" class="msg-box"></div>
+        <div id="wing-tasks-container"></div>
+      </div>
+
+      <!-- TAB: COMMITTEE DESIGNATIONS -->
+      <div id="view-individuals" class="content-card hidden">
+        <div class="card-header">
+          <div class="card-title">
+            <h2>👤 കമ്മിറ്റി സ്ഥാനങ്ങൾ & ഉത്തരവാദിത്തങ്ങൾ</h2>
+            <p>പ്രസിഡന്റ്, ജനറൽ സെക്രട്ടറി, ട്രഷറർ, കൺവീനർമാർ തുടങ്ങിയ ഓരോ സ്ഥാനങ്ങളുടെയും ചുമതലകൾ</p>
+          </div>
+          <div style="display:flex; gap:6px; align-items:center;">
+            <select id="person-select" onchange="renderIndividualView()" class="select-dropdown"></select>
+            <button onclick="copyElementText('individual-msg', 'നിർദ്ദേശം കോപ്പി ചെയ്തു!')" class="btn-copy">കോപ്പി</button>
+            <a id="share-ind-wa" href="#" target="_blank" class="btn-whatsapp">വാട്സാപ്പ് ഷെയർ</a>
+          </div>
+        </div>
+        <div id="individual-msg" class="msg-box"></div>
+        <div id="ind-tasks-container"></div>
+      </div>
+
+      <!-- TAB: TIER MESSAGING -->
+      <div id="view-messages" class="content-card hidden">
+        <div class="card-header">
+          <div class="card-title">
+            <h2>💬 ഓരോ പ്രസ്ഥാന ഘടകങ്ങൾക്കുമുള്ള പ്രത്യേക വാട്സാപ്പ് സന്ദേശങ്ങൾ</h2>
+            <p>കോർ കമ്മിറ്റി, എക്സിക്യൂട്ടീവ് കൗൺസിൽ, മുഴുവൻ അംഗങ്ങൾ, പൊതുജനങ്ങൾ എന്നിവർക്കുള്ള നിർദ്ദേശങ്ങൾ</p>
+          </div>
+          <div style="display:flex; gap:6px;">
+            <select id="msg-tier-select" onchange="renderTierMessageTab()" class="select-dropdown">
+              <option value="core">🔒 കോർ കമ്മിറ്റി (Tier 1 - Confidential)</option>
+              <option value="executive">🔐 എക്സിക്യൂട്ടീവ് കൗൺസിൽ (Tier 2)</option>
+              <option value="members">👥 മുഴുവൻ അംഗങ്ങൾ (Tier 3)</option>
+              <option value="public">📢 പൊതുജനങ്ങൾ / മഹല്ല് (Tier 4)</option>
+            </select>
+            <button onclick="copyElementText('tier-dynamic-msg-box', 'സന്ദേശം കോപ്പി ചെയ്തു!')" class="btn-copy">കോപ്പി</button>
+            <a id="share-tier-dynamic-wa" href="#" target="_blank" class="btn-whatsapp">വാട്സാപ്പ് ഷെയർ</a>
+          </div>
+        </div>
+        <div id="tier-dynamic-msg-box" class="msg-box"></div>
+      </div>
+
+      <!-- TAB: MEETING AGENDA PLANNER -->
+      <div id="view-agenda" class="content-card hidden">
+        <div class="card-header">
+          <div class="card-title">
+            <h2>🗓️ പ്രതിമാസ മീറ്റിംഗ് നോട്ടീസും അജണ്ടയും</h2>
+            <p>യോഗങ്ങൾക്കായുള്ള ചിട്ടയായ നോട്ടീസും അജണ്ടയും</p>
+          </div>
+          <div style="display:flex; gap:6px;">
+            <select id="agenda-category-select" onchange="renderAgendaView()" class="select-dropdown">
+              <option value="core">1. കോർ കമ്മിറ്റി ആലോചനാ യോഗം (Tier 1)</option>
+              <option value="executive">2. എക്സിക്യൂട്ടീവ് കൗൺസിൽ യോഗം (Tier 2)</option>
+              <option value="general">3. മുഴുവൻ അംഗങ്ങളുടെ ജനറൽ ബോഡി യോഗം (Tier 3)</option>
+              <option value="public">4. പൊതുജന സംഗമം / മഹല്ല് കൂട്ടായ്മ (Tier 4)</option>
+            </select>
+            <button onclick="copyElementText('agenda-msg', 'അജണ്ട നോട്ടീസ് കോപ്പി ചെയ്തു!')" class="btn-copy">കോപ്പി</button>
+            <a id="share-agenda-wa" href="#" target="_blank" class="btn-whatsapp">വാട്സാപ്പ് ഷെയർ</a>
+          </div>
+        </div>
+        <div style="display:flex; gap:10px; margin-bottom:12px; flex-wrap:wrap;">
+          <input type="text" id="agenda-custom-date" placeholder="തീയതി (ഉദാ: വ്യാഴം രാത്രി)" class="select-dropdown" style="flex:1; min-width:180px;" oninput="renderAgendaView()">
+          <input type="text" id="agenda-custom-time" placeholder="സമയം (ഉദാ: രാത്രി 8:30 ന്)" class="select-dropdown" style="flex:1; min-width:140px;" oninput="renderAgendaView()">
+          <input type="text" id="agenda-custom-venue" placeholder="വേദി (ഉദാ: മദ്റസ ഹാൾ)" class="select-dropdown" style="flex:1; min-width:180px;" oninput="renderAgendaView()">
+        </div>
+        <div id="agenda-msg" class="msg-box"></div>
+      </div>
+
+      <!-- TAB: ADMIN CONTROL -->
+      <div id="view-admin" class="content-card hidden">
+        <div class="card-header">
+          <div class="card-title">
+            <h2>👑 അഡ്മിൻ കൺട്രോൾ ഡാഷ്‌ബോർഡ്</h2>
+            <p>കമ്മിറ്റി സ്ഥാനങ്ങൾ, പാസ്‌വേഡ് മാനേജ്‌മെന്റ്, ഘടനാപരമായ നിയന്ത്രണം</p>
+          </div>
+        </div>
+        <div style="background:#ffffff; border:1px solid var(--border); border-radius:12px; padding:14px; overflow-x:auto;">
+          <table style="width:100%; border-collapse:collapse; font-size:12px; text-align:left;">
+            <thead><tr style="background:#f1f5f9;"><th style="padding:8px;">സ്ഥാനം</th><th style="padding:8px;">ചുമതലപ്പെട്ടയാൾ</th><th style="padding:8px;">വിഭാഗം</th><th style="padding:8px;">പിൻ</th><th style="padding:8px;">നടപടി</th></tr></thead>
+            <tbody id="admin-leaders-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TAB: SETTINGS -->
+      <div id="view-settings" class="content-card hidden">
+        <div class="card-header">
+          <div class="card-title">
+            <h2>⚙️️ സിസ്റ്റം ക്രമീകരണങ്ങൾ & ബാക്കപ്പ്</h2>
+            <p>യൂണിറ്റ് പ്രൊഫൈൽ, പിൻ മാറ്റൽ, ബാക്കപ്പ് ഡൗൺലോഡ്</p>
+          </div>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap:14px;">
+          <div style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:12px; padding:14px;">
+            <h3 style="font-size:13.5px; font-weight:800; margin-bottom:8px;">🏢 നിലവിലെ ഘടക വിവരങ്ങൾ</h3>
+            <div style="margin-bottom:8px;"><label style="font-size:11.5px; font-weight:700;">പേര്:</label><input type="text" id="setting-unit-name" class="form-control"></div>
+            <div style="margin-bottom:8px;"><label style="font-size:11.5px; font-weight:700;">മേഖല / ജില്ല:</label><input type="text" id="setting-unit-region" class="form-control"></div>
+            <button onclick="saveCurrentUnitDetails()" class="btn-copy" style="width:100%;">സേവ് ചെയ്യുക</button>
+          </div>
+          <div style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:12px; padding:14px;">
+            <h3 style="font-size:13.5px; font-weight:800; margin-bottom:8px;">💾 ഡാറ്റാ ബാക്കപ്പ് & എക്സ്പോർട്ട്</h3>
+            <button onclick="exportDataBackup()" class="btn-action" style="width:100%; margin-bottom:8px;">📥 സിസ്റ്റം ബാക്കപ്പ് ഡൗൺലോഡ് (JSON)</button>
+            <button onclick="openNewUnitModal()" class="btn-copy" style="width:100%; background:#4f46e5;">➕ മറ്റൊരു യൂണിറ്റ് ഉണ്ടാക്കുക / മാറ്റുക</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- IDEA MODAL (BOTTOM-UP SUGGESTION ENTRY) -->
+  <div id="idea-modal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>💡 പുതിയ ആശയം / പ്രോജക്ട് നിർദ്ദേശിക്കുക</h3>
+        <button onclick="closeIdeaModal()" class="modal-close-btn">&times;</button>
+      </div>
+      <p style="font-size:12px; color:#64748b; margin-bottom:12px;">താങ്കൾ സമർപ്പിക്കുന്ന നിർദ്ദേശത്തിന് യൂണിറ്റിലെ 60% അംഗങ്ങളുടെ അംഗീകാരം ലഭിച്ചാൽ മേൽത്തട്ടിലേക്ക് (മേഖല ➔ ജില്ല ➔ സംസ്ഥാനം ➔ നാഷണൽ) നേരിട്ട് എസ്കലേഷൻ ചെയ്യപ്പെടും!</p>
+      <div class="form-group">
+        <label>നിർദ്ദേശത്തിന്റെ തലക്കെട്ട് (Title) *</label>
+        <input type="text" id="modal-idea-title" class="form-control" placeholder="ഉദാ: തീരദേശ ആംബുലൻസ് സർവീസ്">
+      </div>
+      <div class="form-group">
+        <label>വിശദീകരണം & നേട്ടങ്ങൾ (Details) *</label>
+        <textarea id="modal-idea-desc" class="form-control" rows="3" placeholder="പദ്ധതിയുടെ ആവശ്യകതയും നടപ്പിലാക്കാനുള്ള നിർദ്ദേശങ്ങളും രേഖപ്പെടുത്തുക"></textarea>
+      </div>
+      <div class="form-group">
+        <label>ഏത് വിംഗുമായി ബന്ധപ്പെട്ടത്?</label>
+        <select id="modal-idea-wing" class="form-control"></select>
+      </div>
+      <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:14px;">
+        <button type="button" onclick="closeIdeaModal()" class="guest-btn" style="width:auto; padding:8px 14px;">ക്യാൻസൽ</button>
+        <button type="button" onclick="submitNewIdea()" class="btn-copy" style="padding:8px 16px;">സമർപ്പിക്കുക</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SERVICE ENTRY MODAL (COMMUNITY DESK ENTRY) -->
+  <div id="service-modal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>➕ കമ്മ്യൂണിറ്റി കെയർ എൻട്രി ചേർക്കുക</h3>
+        <button onclick="closeServiceModal()" class="modal-close-btn">&times;</button>
+      </div>
+      <div class="form-group">
+        <label>വിഭാഗം തെരഞ്ഞെടുക്കുക (Category) *</label>
+        <select id="modal-service-category" class="form-control">
+          <option value="job">💼 ജോലി ഒഴിവ് / അന്വേഷണം (Job Desk)</option>
+          <option value="marriage">💍 മംഗല്യ സഹായം (Matrimony Desk)</option>
+          <option value="loan">💰 പലിശരഹിത വായ്പ / നിധി (Interest-Free)</option>
+          <option value="blood">🩸 അടിയന്തിര രക്ത ആവശ്യം (Blood Bank)</option>
+          <option value="equipment">♿ മെഡിക്കൽ ഉപകരണം (Equipment Bank)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>വിവരം / തലക്കെട്ട് *</label>
+        <input type="text" id="modal-service-title" class="form-control" placeholder="ഉദാ: ഡ്രൈവർ ഒഴിവ് / ഒ പോസിറ്റീവ് രക്തം ആവശ്യം">
+      </div>
+      <div class="form-group">
+        <label>വിശദാംശങ്ങൾ & ബന്ധപ്പെടേണ്ട നമ്പർ *</label>
+        <textarea id="modal-service-details" class="form-control" rows="3" placeholder="വിശദവിവരങ്ങളും ഫോൺ നമ്പറും നൽകുക"></textarea>
+      </div>
+      <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:14px;">
+        <button type="button" onclick="closeServiceModal()" class="guest-btn" style="width:auto; padding:8px 14px;">ക്യാൻസൽ</button>
+        <button type="button" onclick="submitCommunityEntry()" class="btn-copy" style="padding:8px 16px;">സേവ് ചെയ്യുക</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TASK MODAL (ADD / EDIT) -->
+  <div id="task-modal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="task-modal-title">➕ പുതിയ കർമ്മപദ്ധതി ചേർക്കുക</h3>
+        <button onclick="closeTaskModal()" class="modal-close-btn">&times;</button>
+      </div>
+      <input type="hidden" id="modal-task-id" value="">
+      <div class="form-group">
+        <label>ടാസ്‌ക് തലക്കെട്ട് *</label>
+        <input type="text" id="modal-task-name" class="form-control" placeholder="ഉദാ: സൗജന്യ രക്തദാന രജിസ്ട്രേഷൻ ക്യാമ്പ്">
+      </div>
+      <div class="form-group">
+        <label>വിശദീകരണം</label>
+        <textarea id="modal-task-desc" class="form-control" rows="2"></textarea>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+        <div class="form-group">
+          <label>സബ് വിംഗ് *</label>
+          <select id="modal-task-wing" class="form-control"></select>
+        </div>
+        <div class="form-group">
+          <label>ഉത്തരവാദിത്തപ്പെട്ട സ്ഥാനം *</label>
+          <select id="modal-task-resp" class="form-control"></select>
+        </div>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+        <div class="form-group">
+          <label>കമ്മിറ്റി തലം (Tier) *</label>
+          <select id="modal-task-tier" class="form-control">
+            <option value="unit">🌱 യൂണിറ്റ് തലം</option>
+            <option value="core">🔒 കോർ കമ്മിറ്റി (Tier 1)</option>
+            <option value="executive">🔐 എക്സിക്യൂട്ടീവ് (Tier 2)</option>
+            <option value="members">👥 പൊതു അംഗങ്ങൾ (Tier 3)</option>
+            <option value="mekhala">🕌 മേഖലാ തലം</option>
+            <option value="district">🏢 ജില്ലാ തലം</option>
+            <option value="state">🌴 സംസ്ഥാന സമിതി</option>
+            <option value="national">🇮🇳 നാഷണൽ കമ്മിറ്റി</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>സ്റ്റാറ്റസ്</label>
+          <select id="modal-task-status" class="form-control">
+            <option value="pending">🔴 ബാക്കി (Pending)</option>
+            <option value="in-progress">🟡 നടക്കുന്നു (In-Progress)</option>
+            <option value="done">✅ പൂർത്തിയായി (Done)</option>
+            <option value="missed">⚠️ റീഷെഡ്യൂൾ (Missed)</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+        <div class="form-group">
+          <label>ബാധകമായ വർഷം *</label>
+          <select id="modal-task-year" class="form-control">
+            <option value="2026">2026</option>
+            <option value="2027">2027</option>
+            <option value="2028">2028</option>
+            <option value="2029">2029</option>
+            <option value="2030">2030</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>ഹിജ്‌റ മാസം</label>
+          <select id="modal-task-month" class="form-control">
+            <option value="rabi_al_akhir">റബീഉൽ ആഖിർ</option>
+            <option value="jumada_al_ula">ജുമാദൽ ഊലാ</option>
+            <option value="jumada_al_akhira">ജുമാദൽ ആഖിറ</option>
+            <option value="rajab">റജബ്</option>
+            <option value="shaban">ശഅ്ബാൻ</option>
+            <option value="ramadan">വിശുദ്ധ റമളാൻ</option>
+            <option value="shawwal">ശവ്വാൽ</option>
+            <option value="dhul_qadah">ദുൽഖഅ്ദ</option>
+            <option value="dhul_hijjah">ദുൽഹിജ്ജ</option>
+            <option value="muharram">മുഹർറം</option>
+            <option value="safar">സഫർ</option>
+            <option value="rabi_al_awwal">റബീഉൽ അവ്വൽ</option>
+            <option value="all">മുഴുവൻ മാസങ്ങളും</option>
+          </select>
+        </div>
+      </div>
+      <div style="background:#f0fdf4; border:1px solid #86efac; border-radius:10px; padding:10px; margin-bottom:12px;">
+        <label style="font-size:11.5px; font-weight:700; color:#065f46;">🔁 ആവർത്തന സ്വഭാവം:</label>
+        <select id="modal-task-recurrence" class="form-control">
+          <option value="one-time">📌 ഈ വർഷം / ഈ കമ്മിറ്റിക്ക് മാത്രം (അടുത്ത വർഷം ആവർത്തിക്കില്ല)</option>
+          <option value="annual">🏆 വാർഷിക ആവർത്തനം (എല്ലാ വർഷവും)</option>
+          <option value="monthly">📅 പ്രതിമാസ സ്ഥിരം ചുമതല</option>
+          <option value="weekly">🕌 പ്രതിവാര ചുമതല</option>
+          <option value="daily">⚡ നിത്യേനയുള്ള കർമ്മം</option>
+        </select>
+      </div>
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <button type="button" id="modal-delete-btn" onclick="deleteCurrentTask()" class="btn-copy" style="background:#dc2626; display:none;">🗑️ ഡിലീറ്റ്</button>
+        <div style="display:flex; gap:8px; margin-left:auto;">
+          <button type="button" onclick="closeTaskModal()" class="guest-btn" style="width:auto; padding:8px 14px;">ക്യാൻസൽ</button>
+          <button type="button" onclick="saveTaskFromModal()" class="btn-copy" style="padding:8px 16px;">💾 സേവ് ചെയ്യുക</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SETUP NEW UNIT MODAL -->
+  <div id="new-unit-modal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>🏢 പുതിയ യൂണിറ്റ് / ഘടകം സജ്ജീകരിക്കുക</h3>
+        <button onclick="closeNewUnitModal()" class="modal-close-btn">&times;</button>
+      </div>
+      <div class="form-group"><label>യൂണിറ്റ് പേര് (Unit Name) *</label><input type="text" id="modal-unit-name-input" class="form-control" placeholder="ഉദാ: SKSSF ചേറ്റുവ യൂണിറ്റ്"></div>
+      <div class="form-group"><label>മേഖല / ജില്ല</label><input type="text" id="modal-unit-region-input" class="form-control" placeholder="ഉദാ: ചാവക്കാട് മേഖല, തൃശൂർ"></div>
+      <div class="form-group"><label>അഡ്മിൻ മാസ്റ്റർ പിൻ</label><input type="password" id="modal-unit-pin-input" class="form-control" value="1989" maxlength="8"></div>
+      <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:14px;">
+        <button type="button" onclick="closeNewUnitModal()" class="guest-btn" style="width:auto; padding:8px 14px;">ക്യാൻസൽ</button>
+        <button type="button" onclick="confirmCreateNewUnit()" class="btn-copy" style="padding:8px 16px;">സജ്ജീകരിക്കുക</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const ARABIC_SALAM_FULL = "السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللهِ وَبَرَكَاتُهُ";
+    const ML_DAYS = ["ഞായർ", "തിങ്കൾ", "ചൊവ്വ", "ബുധൻ", "വ്യാഴം", "വെള്ളി", "ശനി"];
+    const ML_MONTHS = ["ജനുവരി", "ഫെബ്രുവരി", "മാർച്ച്", "ഏപ്രിൽ", "മേയ്", "ജൂൺ", "ജൂലൈ", "ഓഗസ്റ്റ്", "സെപ്റ്റംബർ", "ഒക്ടോബർ", "നവംബർ", "ഡിസംബർ"];
+
+    // 1. ORGANISATIONAL STANDARD SUB-WINGS REGISTRY
+    const subWingsRegistry = {
+      "വിഖായ": { color: "#b91c1c", taskTitle: "ആതുരാലയ സേവനം, ആക്സിഡന്റ് കെയർ, രക്തദാനം, ലഹരിവിമുക്തി, ദുരിതാശ്വാസം" },
+      "സഹചാരി": { color: "#047857", taskTitle: "മെഡിക്കൽ ഉപകരണ ബാങ്ക്, പാലിയേറ്റീവ് സഹായം, പലിശരഹിത നിധി & റമളാൻ റിലീഫ്" },
+      "മീഡിയ & സൈബർ": { color: "#0284c7", taskTitle: "ഡിജിറ്റൽ മാധ്യമങ്ങൾ, വെബ്‌സൈറ്റുകൾ, മൊബൈൽ ആപ്പുകൾ, സൈക്കോൺ" },
+      "ത്വലബ": { color: "#0f766e", taskTitle: "ദർസ്-അറബിക് കോളേജ് വിദ്യാർത്ഥി ഏകോപനം, ദിശാബോധം & ദീനീവിദ്യാഭ്യാസ കാമ്പയിൻ" },
+      "ഐ.എഫ്.സി (IFC)": { color: "#d97706", taskTitle: "ഇസ്‌ലാമിക് ഫാമിലി ക്ലസ്റ്റർ, വനിതാ മതവിജ്ഞാനം, പാരന്റിംഗ് & കുടുംബ ശാക്തീകരണം" },
+      "ഇബാദ്": { color: "#4f46e5", taskTitle: "പ്രതിമാസ കുത്തുബിയ്യത്ത്, മൗലിദ്, തസ്കിയത്ത് & ആത്മീയ ദഅ്‌വത്ത് സദസ്സുകൾ" },
+      "ഇസ്തിഖാമ": { color: "#059669", taskTitle: "അഹ്‌ലുസ്സുന്ന ആദർശ സംരക്ഷണം, പുത്തനാശയ പ്രതിരോധം & സംവാദങ്ങൾ" },
+      "ട്രെൻഡ്": { color: "#ea580c", taskTitle: "Taste സോഫ്റ്റ് സ്കിൽ പരിശീലനം, കരിയർ ക്ലിനിക്ക് & ജോബ് കണക്റ്റ്" },
+      "സർഗലയം": { color: "#7c3aed", taskTitle: "സർഗ്ഗസംഗമം മത്സരങ്ങൾ, സാഹിത്യ കളരി, മീലാദ് സപ്ലിമെന്റ് & ക്രിയേറ്റീവ് വേദികൾ" },
+      "ഓർഗാനെറ്റ്": { color: "#0369a1", taskTitle: "കാഡർ മാനേജ്‌മെന്റ്, അദാലത്ത്, സർട്ടിഫിക്കറ്റ് കോഴ്സുകൾ, റിസർച്ച്" },
+      "സത്യധാര": { color: "#0891b2", taskTitle: "ഔദ്യോഗിക മുഖപത്ര പ്രചാരണം & വരിചേർക്കൽ കാമ്പയിൻ" },
+      "ക്യാമ്പസ് വിംഗ്": { color: "#0284c7", taskTitle: "ഭൗതിക കലാലയ വിദ്യാർത്ഥി ഏകോപനം, ധാർമിക സംസ്കരണം" },
+      "മനീഷ": { color: "#b45309", taskTitle: "സാംസ്കാരിക ബൗദ്ധിക പ്രതിരോധം, ഇസ്‌‌ലാമോഫോബിയ കൗണ്ടർ" },
+      "മീം (MEEM)": { color: "#059669", taskTitle: "മെഡിക്കൽ വിദ്യാർത്ഥി ഏകോപനം, ഹെൽത്ത് ക്ലിനിക്ക് & ബോധവൽക്കരണം" }
+    };
+
+    // 2. COLLABORATION WITH SAMASTHA SISTER WINGS (JOINT TASKS)
+    const COLLAB_SISTER_TASKS = [
+      { id: 9008, sister: "sic", title: "ഗ്ലോബൽ SIC പ്രവാസി സംഗമവും കൗൺസിൽ ഏകോപനവും", wing: "ഓർഗാനെറ്റ്", desc: "ഗൾഫ് - യൂറോപ്പ് നാടുകളിലെ സമസ്ത ഇസ്‌ലാമിക് സെന്ററുകളുമായി ചേർന്നുള്ള ഗ്ലോബൽ നെറ്റ്വർക്കിംഗ്.", tier: "global", status: "in-progress" },
+      { id: 9009, sister: "spc", title: "പ്രവാസി ക്ഷേമനിധി & അടിയന്തിര ലീഗൽ എയ്ഡ് ഹെൽപ്പ് ഡെസ്ക്", wing: "സഹചാരി", desc: "പ്രവാസി സെൽ (SPC) & ലീഗൽ സെൽ (SLC) സംയുക്ത പ്രവാസി സുരക്ഷാ പദ്ധതി.", tier: "global", status: "in-progress" },
+      { id: 9010, sister: "elearn", title: "ഗ്ലോബൽ ഓൺലൈൻ മദ്റസാ ഇ-ലേണിംഗ് അഡ്മിഷൻ ഡ്രൈവ്", wing: "ട്രെൻഡ്", desc: "വിദേശത്ത് വളരുന്ന പ്രവാസി കുട്ടികൾക്ക് ഏകീകൃത സിലബസിൽ ഓൺലൈൻ മദ്റസാ വിദ്യാഭ്യാസം.", tier: "global", status: "pending" },
+      { id: 9001, sister: "skju", title: "സുപ്രഭാതം ദിനപത്ര സ്പോൺസർഷിപ്പ് & പ്രചാരണ കാമ്പയിൻ", wing: "മീഡിയ", desc: "പള്ളികളിലും വായനശാലകളിലും സുപ്രഭാതം ദിനപത്രം എത്തിക്കൽ.", tier: "unit", status: "in-progress" },
+      { id: 9002, sister: "skimvb", title: "മദ്റസാ ഇ-ലേണിംഗ് സ്മാർട്ട് റൂം സപ്പോർട്ട്", wing: "ട്രെൻഡ്", desc: "മദ്റസകളിൽ സ്മാർട്ട് ടിവി, ഡിജിറ്റൽ പ്രൊജക്ടർ സൗകര്യങ്ങൾ ഒരുക്കൽ.", tier: "unit", status: "pending" },
+      { id: 9003, sister: "sys", title: "സാന്ത്വനം പാലിയേറ്റീവ് വിസിറ്റും റിലീഫ് കിറ്റുകളും", wing: "സഹചാരി", desc: "SYS സാന്ത്വനം സെല്ലുമായി ചേർന്ന് കിടപ്പുരോഗികൾക്ക് മെഡിക്കൽ സഹായം.", tier: "unit", status: "in-progress" },
+      { id: 9004, sister: "smf", title: "മഹല്ല് ശാക്തീകരണ സർവേയും ഖബർസ്ഥാൻ ശുചീകരണവും", wing: "വിഖായ", desc: "SMF മസ്ജിദ് സമിതിയുമായി ചേർന്ന് മഹല്ല് സേവന ശ്രമദാനം.", tier: "unit", status: "pending" },
+      { id: 9005, sister: "skjmcc", title: "മുഅല്ലിം സ്നേഹോപഹാരവും അധ്യാപക ദിനാദരവും", wing: "എക്സിക്യൂട്ടീവ്", desc: "ജംഇയ്യത്തുൽ മുഅല്ലിമീൻ അധ്യാപകർക്ക് പ്രത്യേക ഈദ് ഉപഹാരങ്ങൾ നൽകൽ.", tier: "unit", status: "pending" },
+      { id: 9006, sister: "sksbv", title: "ബാലവേദി ജ്ഞാനതീരം & മജ്‌ലിസുൽ മആരിഫ് സർഗ്ഗോത്സവം", wing: "സർഗലയം", desc: "SKSBV മദ്റസാ കുട്ടികളുടെ സർഗ്ഗപ്രതിഭ മത്സരങ്ങൾക്ക് വേദി ഒരുക്കൽ.", tier: "unit", status: "pending" },
+      { id: 9007, sister: "snec", title: "SNEC / ASMI ഉന്നത സമന്വയ വിദ്യാഭ്യാസ എൻട്രൻസ് ഗൈഡൻസ്", wing: "ട്രെൻഡ്", desc: "SNEC കോളേജുകളിലേക്ക് വിദ്യാർത്ഥികളെ ആകർഷിക്കാനുള്ള സെഷൻ.", tier: "unit", status: "pending" }
+    ];
+
+    // 3. UNIVERSAL MASTER ANNUAL CALENDAR (PERPETUAL)
+    const UNIVERSAL_HIJRI_CALENDAR = {
+      muharram: { id: "muharram", name: "മുഹർറം", tasks: [
+        { id: 1001, title: "മഹല്ല് തല സമൂഹ ആശൂറാഅ് സൗഹൃദ ഇഫ്ത്വാർ മീറ്റ്", wing: "വിഖായ & സഹചാരി", resp: "വിഖായ & സഹചാരി കൺവീനർമാർ", status: "pending", tier: "unit", applicableYear: 2026, isRecurring: "annual" },
+        { id: 1002, title: "കർബല ചരിത്ര സെമിനാറും ഹിജ്റ പുതുവർഷ സംഗമവും", wing: "ഇബാദ് & ഇസ്തിഖാമ", resp: "ഇബാദ് കൺവീനർ", status: "pending", tier: "unit", applicableYear: 2026, isRecurring: "annual" },
+        { id: 1003, title: "ചേളാരി സമസ്ത വിദ്യാഭ്യാസ ബോർഡ് കാര്യാലയ സന്ദർശനം", wing: "ത്വലബ", resp: "ത്വലബ കൺവീനർ", status: "pending", tier: "unit", applicableYear: 2026, isRecurring: "annual" }
+      ]},
+      safar: { id: "safar", name: "സഫർ", tasks: [
+        { id: 1101, title: "സ്വാതന്ത്ര്യ സ്മൃതി സംഗമവും പതാക ഉയർത്തലും (ആഗസ്റ്റ് 15)", wing: "വിഖായ & മനീഷ", resp: "മുഴുവൻ ഭാരവാഹികളും", status: "pending", tier: "unit", applicableYear: 2026, isRecurring: "annual" },
+        { id: 1102, title: "ആഖിർ ബുധൻ സുന്നി ആധികാരിക പഠന ക്ലാസ്", wing: "ഇബാദ് & ഇസ്തിഖാമ", resp: "ഇബാദ് കൺവീനർ", status: "pending", tier: "unit", applicableYear: 2026, isRecurring: "annual" },
+        { id: 1103, title: "റബീഉൽ അവ്വൽ വിളംബര ജാഥയും മുന്നൊരുക്കങ്ങളും", wing: "സർഗലയം & വിഖായ", resp: "സർഗലയം കൺവീനർ", status: "pending", tier: "unit", applicableYear: 2026, isRecurring: "annual" }
+      ]},
+      rabi_al_awwal: { id: "rabi_al_awwal", name: "റബീഉൽ അവ്വൽ", tasks: [
+        { id: 1201, title: "വിപുലമായ മീലാദ് മഹാ സമ്മേളനവും നബിദിന റാലിയും", wing: "മുഴുവൻ വിംഗുകളും", resp: "മുഴുവൻ ഭാരവാഹികളും", status: "pending", tier: "unit", applicableYear: 2026, isRecurring: "annual" },
+        { id: 1202, title: "വാർഷിക ബെസ്റ്റ് സബ് വിംഗ് റോളിംഗ് ട്രോഫി സമ്മാനിക്കൽ", wing: "ഓർഗാനെറ്റ് & കോർ കമ്മിറ്റി", resp: "പ്രസിഡന്റ് & സെക്രട്ടറി", status: "pending", tier: "core", applicableYear: 2026, isRecurring: "annual" },
+        { id: 1203, title: "യൂണിറ്റ് സ്പെഷ്യൽ മീലാദ് സപ്ലിമെന്റ് പ്രകാശനം", wing: "സർഗലയം & ISA", resp: "സർഗലയം കൺവീനർ", status: "pending", tier: "unit", applicableYear: 2026, isRecurring: "annual" }
+      ]},
+      rabi_al_akhir: { id: "rabi_al_akhir", name: "റബീഉൽ ആഖിർ", tasks: [
+        { id: 10009, title: "സുപ്രഭാതം പത്രം പള്ളികളിലും സ്ഥാപനങ്ങളിലും സ്പോൺസർഷിപ്പ്", wing: "മീഡിയ & സൈബർ", resp: "പ്രസിഡന്റ് & മീഡിയ കൺവീനർ", status: "in-progress", tier: "executive", applicableYear: 2026, isRecurring: "annual" },
+        { id: 10010, title: "വിഖായ രക്തദാന വിവരശേഖരണം & ഡാറ്റാബേസ്", wing: "വിഖായ", resp: "വിഖായ കൺവീനർ", status: "missed", tier: "unit", applicableYear: 2026, isRecurring: "annual", desc: "കാലാവധി കഴിഞ്ഞതിനാൽ അടുത്ത വർഷത്തേക്ക് മുന്നൊരുക്കം നടത്തുക." },
+        { id: 10016, title: "വിഖായ സർക്കാർ സേവന & ജനക്ഷേമ ആനുകൂല്യ ഡെസ്ക്", wing: "വിഖായ", resp: "വിഖായ കൺവീനർ", status: "in-progress", tier: "unit", applicableYear: 2026, isRecurring: "annual" }
+      ]},
+      jumada_al_ula: { id: "jumada_al_ula", name: "ജുമാദൽ ഊലാ", tasks: [
+        { id: 201, title: "മഹല്ല് പള്ളികളിലെ ഔദ്യോഗിക ശാക്തീകരണ പര്യടനം", wing: "എക്സിക്യൂട്ടീവ്", resp: "മുഴുവൻ ഭാരവാഹികളും", status: "pending", tier: "executive", applicableYear: 2026, isRecurring: "annual" },
+        { id: 202, title: "സമസ്ത രജിസ്ട്രേഷൻ ദിനാചരണം (നവംബർ 14)", wing: "ഇബാദ് & ഇസ്തിഖാമ", resp: "ഇബാദ് കൺവീനർ", status: "pending", tier: "unit", applicableYear: 2026, isRecurring: "annual" },
+        { id: 204, title: "24x7 എമർജൻസി ബ്ലഡ് ഡോണർ ഹെൽപ്പ്‌ലൈൻ ഔദ്യോഗിക സമർപ്പണം", wing: "വിഖായ", resp: "വിഖായ കൺവീനർ", status: "pending", tier: "unit", applicableYear: 2026, isRecurring: "annual" }
+      ]},
+      jumada_al_akhira: { id: "jumada_al_akhira", name: "ജുമാദൽ ആഖിറ", tasks: [
+        { id: 301, title: "യൂണിറ്റ് തല സർഗ്ഗസംഗമം വിജ്ഞാന-കലാ മത്സരങ്ങൾ", wing: "സർഗലയം", resp: "സർഗലയം കൺവീനർ", status: "pending", tier: "unit", applicableYear: 2026, isRecurring: "annual" },
+        { id: 302, title: "പ്രായോഗിക മയ്യത്ത് പരിപാലന ക്ലാസ് സംഘടിപ്പിക്കൽ", wing: "വിഖായ", resp: "വിഖായ കൺവീനർ", status: "pending", tier: "unit", applicableYear: 2026, isRecurring: "annual" }
+      ]},
+      rajab: { id: "rajab", name: "റജബ്", tasks: [
+        { id: 401, title: "ഇസ്റാഅ് - മിഅ്റാജ് പ്രഭാഷണ സമ്മേളനവും സമൂഹ പ്രാർത്ഥനയും", wing: "ഇബാദ് & ഇസ്തിഖാമ", resp: "ഇബാദ് കൺവീനർ", status: "pending", tier: "unit", applicableYear: 2026, isRecurring: "annual" },
+        { id: 402, title: "പലിശരഹിത വായ്പാ നിധിയിൽ നിന്നുള്ള സഹായ വിതരണം", wing: "സഹചാരി", resp: "സഹചാരി കൺവീനർ", status: "pending", tier: "core", applicableYear: 2026, isRecurring: "annual" }
+      ]},
+      shaban: { id: "shaban", name: "ശഅ്ബാൻ", tasks: [
+        { id: 501, title: "SKSSF സ്ഥാപക ദിനാചരണവും പതാക ഉയർത്തലും (ഫെബ്രുവരി 19)", wing: "വിഖായ & ഓർഗാനെറ്റ്", resp: "മുഴുവൻ ഭാരവാഹികളും", status: "pending", tier: "unit", applicableYear: 2026, isRecurring: "annual" },
+        { id: 502, title: "മുഴുവൻ അംഗങ്ങളുടെയും ജനറൽ ബോഡി യോഗം", wing: "കോർ കമ്മിറ്റി", resp: "ജനറൽ സെക്രട്ടറി", status: "pending", tier: "core", applicableYear: 2026, isRecurring: "annual" }
+      ]},
+      ramadan: { id: "ramadan", name: "വിശുദ്ധ റമളാൻ", tasks: [
+        { id: 601, title: "നിർദ്ധന കുടുംബങ്ങൾക്കുള്ള റമളാൻ ഭക്ഷ്യധാന്യ കിറ്റ് വിതരണം", wing: "സഹചാരി", resp: "സഹചാരി കൺവീനർ", status: "pending", tier: "unit", applicableYear: 2026, isRecurring: "annual" },
+        { id: 602, title: "സംസ്ഥാന സഹചാരി റിലീഫ് ഫണ്ട് പള്ളികളിൽ സമാഹരിക്കൽ", wing: "സഹചാരി", resp: "സഹചാരി കൺവീനർ & ട്രഷറർ", status: "pending", tier: "executive", applicableYear: 2026, isRecurring: "annual" }
+      ]},
+      shawwal: { id: "shawwal", name: "ശവ്വാൽ", tasks: [
+        { id: 701, title: "ഈദ് സൗഹൃദ സംഗമവും മദ്റസാ ഉസ്താദുമാർക്ക് ആദരവും", wing: "എക്സിക്യൂട്ടീവ്", resp: "മുഴുവൻ ഭാരവാഹികളും", status: "pending", tier: "unit", applicableYear: 2026, isRecurring: "annual" },
+        { id: 702, title: "തീരദേശ വേനൽക്കാല കുടിവെള്ള വിതരണ മിഷൻ", wing: "വിഖായ & സഹചാരി", resp: "വിഖായ കൺവീനർ", status: "pending", tier: "unit", applicableYear: 2026, isRecurring: "annual" }
+      ]},
+      dhul_qadah: { id: "dhul_qadah", name: "ദുൽഖഅ്ദ", tasks: [
+        { id: 801, title: "ഹജ്ജ് പഠന ക്ലാസും തീർത്ഥാടകർക്ക് യാത്രയയപ്പ് സംഗമവും", wing: "ഇബാദ്", resp: "ഇബാദ് കൺവീനർ", status: "pending", tier: "unit", applicableYear: 2026, isRecurring: "annual" },
+        { id: 802, title: "ട്രെൻഡ് Taste കൗമാര സോഫ്റ്റ് സ്കിൽ പരിശീലനം & കരിയർ ക്ലിനിക്ക്", wing: "ട്രെൻഡ്", resp: "ട്രെൻഡ് കൺവീനർ", status: "pending", tier: "unit", applicableYear: 2026, isRecurring: "annual" }
+      ]},
+      dhul_hijjah: { id: "dhul_hijjah", name: "ദുൽഹിജ്ജ", tasks: [
+        { id: 901, title: "നാഷണൽ & ലോക്കൽ ഖുർബാനി മീറ്റ് വിതരണ മിഷൻ", wing: "സഹചാരി", resp: "സഹചാരി കൺവീനർ", status: "pending", tier: "unit", applicableYear: 2026, isRecurring: "annual", desc: "മഹല്ലിലെ നിർദ്ധനർക്കും ഉത്തരേന്ത്യൻ ദരിദ്ര ഗ്രാമങ്ങളിലേക്കും ഖുർബാനി മാംസമെത്തിക്കൽ." },
+        { id: 902, title: "സമസ്ത രൂപീകരണ ദിന ചരിത്ര സെമിനാർ (ജൂൺ 26)", wing: "ഇബാദ് & ഇസ്തിഖാമ", resp: "ജനറൽ സെക്രട്ടറി", status: "pending", tier: "unit", applicableYear: 2026, isRecurring: "annual" },
+        { id: 903, title: "വിഖായ ലോക രക്തദാന ദിന പ്രത്യേക മെഗാ ഡ്രൈവ് (ജൂൺ 14)", wing: "വിഖായ", resp: "വിഖായ കൺവീനർ", status: "pending", tier: "unit", applicableYear: 2026, isRecurring: "annual" }
+      ]}
+    };
+
+    // 4. BOTTOM-UP IDEAS FEED & UPVOTE DATABASE (DEMOCRATIC ESCALATION)
+    let communityIdeas = [
+      { id: 101, title: "തീരദേശ എമർജൻസി ആംബുലൻസ് ഫണ്ട് രൂപീകരിക്കൽ", desc: "അപകട ഘട്ടങ്ങളിലും കിടപ്പുരോഗികൾക്കുമായി പ്രാദേശിക ആംബുലൻസ് സൗകര്യം ഏർപ്പെടുത്തൽ.", wing: "വിഖായ", author: "മുഹമ്മദ് ആദിൽ", upvotes: 18, totalMembers: 25, tierStatus: "mekhala", escalated: true },
+      { id: 102, title: "പലിശരഹിത സ്മാർട്ട് മൈക്രോഫിനാൻസ് യൂണിറ്റ് വിപുലീകരണം", desc: "കുടുംബങ്ങളെ കടക്കെണിയിൽ നിന്ന് മോചിപ്പിക്കാൻ പലിശരഹിത വായ്പാ പൂൾ വിപുലീകരിക്കുക.", wing: "സഹചാരി", author: "നിസാർ കെ. കെ", upvotes: 14, totalMembers: 25, tierStatus: "unit", escalated: false },
+      { id: 103, title: "മഹല്ല് കരിയർ അക്കാദമിയും സിവിൽ സർവീസ് ഓറിയന്റേഷനും", desc: "എസ്.എസ്.എൽ.സി, പ്ലസ് ടു കഴിഞ്ഞ കുട്ടികൾക്കായി സൗജന്യ സ്കോളർഷിപ്പ് ഗൈഡൻസ്.", wing: "ട്രെൻഡ്", author: "അബ്ദുൽ ലത്തീഫ്", upvotes: 21, totalMembers: 25, tierStatus: "district", escalated: true }
+    ];
+
+    // 5. COMMUNITY CARE SERVICES DATABASE (JOBS, MARRIAGE, LOANS, BLOOD)
+    let communityServices = [
+      { id: 201, category: "job", title: "ഡ്രൈവർ / ഡെലിവറി എക്സിക്യൂട്ടീവ് ഒഴിവ്", details: "ചാവക്കാട് മേഖലയിൽ പ്രമുഖ സ്ഥാപനത്തിലേക്ക് ഡ്രൈവർമാരെ ആവശ്യമുണ്ട്. ബന്ധപ്പെടുക: 9995188198" },
+      { id: 202, category: "marriage", title: "മംഗല്യ സഹായം - ബിരുദധാരിയായ യുവതി", details: "ധാർമിക പശ്ചാത്തലമുള്ള നിർദ്ധന കുടുംബത്തിലെ പെൺകുട്ടിക്ക് അനുയോജ്യമായ ആലോചനകൾ അന്വേഷിക്കുന്നു. (പൂർണ്ണ രഹസ്യാത്മകം)" },
+      { id: 203, category: "loan", title: "പലിശരഹിത അടിയന്തിര ചികിത്സാ വായ്പ (സഹചാരി)", details: "മാരക രോഗങ്ങളാൽ പ്രയാസപ്പെടുന്ന കുടുംബങ്ങൾക്ക് ₹15,000 വരെയുള്ള പലിശരഹിത വായ്പ." },
+      { id: 204, category: "blood", title: "അടിയന്തിരമായി O+ve രക്തം ആവശ്യം", details: "തൃശൂർ മെഡിക്കൽ കോളേജിൽ നാളെ രാവിലെ 3 യൂണിറ്റ് O+ve രക്തം ആവശ്യം. വിളിക്കുക: 8714144546" },
+      { id: 205, category: "equipment", title: "വീൽചെയർ & എയർ ബെഡ് ലഭ്യമാണ്", details: "സഹചാരി സെന്ററിൽ 2 വീൽചെയറുകളും 3 എയർ ബെഡുകളും റെഡിയാണ്. ആവശ്യമുള്ളവർ ബന്ധപ്പെടുക." }
+    ];
+
+    // 6. DEFAULT APPLICABLE LEADERS & APPLICATION STATE
+    const STANDARD_COMMITTEE_DESIGNATIONS = [
+      { id: "pres", desig: "പ്രസിഡന്റ്", role: "core", wing: "കോർ കമ്മിറ്റി", name: "മുഹമ്മദ് ആദിൽ", pin: "1001" },
+      { id: "sec", desig: "ജനറൽ സെക്രട്ടറി", role: "core", wing: "കോർ കമ്മിറ്റി", name: "നിസാർ കെ. കെ", pin: "1002" },
+      { id: "wsec", desig: "വർക്കിംഗ് സെക്രട്ടറി", role: "core", wing: "കോർ കമ്മിറ്റി", name: "മുഹ്സിൻ പി. എം", pin: "1003" },
+      { id: "tres", desig: "ട്രഷറർ", role: "core", wing: "കോർ കമ്മിറ്റി", name: "വി. ബി. റമീസ് ബാഖവി", pin: "1004" },
+      { id: "coun1", desig: "മേഖലാ കൗൺസിലർ 1", role: "core", wing: "ഇബാദ്", name: "എ. എം. മുഹമ്മദ് സഈദ് ബാഖവി", pin: "1005" },
+      { id: "coun2", desig: "മേഖലാ കൗൺസിലർ 2", role: "core", wing: "വിഖായ", name: "അൻസിൽ വി. എ", pin: "1006" },
+      { id: "vp1", desig: "വൈസ് പ്രസിഡന്റ് (സഹചാരി)", role: "executive", wing: "സഹചാരി", name: "മുഹമ്മദ് സഫീർ ആർ. എം", pin: "2001" },
+      { id: "vp2", desig: "വൈസ് പ്രസിഡന്റ് (ട്രെൻഡ്)", role: "executive", wing: "ട്രെൻഡ്", name: "അബ്ദുൽ ലത്തീഫ്", pin: "2002" },
+      { id: "conv_media", desig: "മീഡിയ കൺവീനർ", role: "executive", wing: "മീഡിയ & സൈബർ", name: "റൈഹാൻ ബഷീർ", pin: "2007" },
+      { id: "conv_sarg", desig: "സർഗലയം കൺവീനർ", role: "executive", wing: "സർഗലയം", name: "മുഹമ്മദ് ഹാറൂൺ പി. എ", pin: "2008" },
+      { id: "conv_twal", desig: "ത്വലബ കൺവീനർ", role: "executive", wing: "ത്വലബ", name: "മുഹമ്മദ് സഫ്‌വാൻ എം. സി", pin: "2009" }
+    ];
+
+    let currentUnitId = "arangadi";
+    let activeUnitData = { id: "arangadi", name: "SKSSF ആറങ്ങാടി യൂണിറ്റ്", region: "ചാവക്കാട് മേഖല, തൃശൂർ", portalLink: "https://skssfarangadiunit.github.io/Task-Manager/" };
+    let activeLeadersList = [...STANDARD_COMMITTEE_DESIGNATIONS];
+    let allCustomTasks = [];
+    let currentTierLevel = 'unit';
+    let currentHorizon = 'monthly';
+    let selectedActiveYear = 2026;
+    let selectedActiveHijriMonth = "auto";
+    let currentUserRole = "core";
+    let loggedInUserTitle = "പ്രസിഡന്റ്";
+    let activeCollabSister = 'all';
+
+    // 7. TIME & HORIZON CALCULATIONS
+    function getSystemDateInfo() {
+      const now = new Date();
+      const currentMonthIndex = now.getMonth();
+      const currentDay = now.getDate();
+      const currentYear = now.getFullYear();
+
+      const hijriMap = { 0: "rajab", 1: "shaban", 2: "ramadan", 3: "shawwal", 4: "dhul_qadah", 5: "dhul_hijjah", 6: "muharram", 7: "safar", 8: "rabi_al_awwal", 9: "rabi_al_akhir", 10: "jumada_al_ula", 11: "jumada_al_akhira" };
+      const detectedPeriodKey = hijriMap[currentMonthIndex] || "rabi_al_akhir";
+      const periodObj = UNIVERSAL_HIJRI_CALENDAR[detectedPeriodKey];
+      const activeHijriYear = 1448 + (currentYear - 2026);
+
+      let specialtyText = "";
+      if (now.getDay() === 4) specialtyText = "വ്യാഴാഴ്ച രാവ്: പ്രതിമാസ സ്വലാത്ത്, മൗലിദ്, കുത്തുബിയ്യത്ത് സദസ്സ്.";
+      else if (now.getDay() === 5) specialtyText = "വിശുദ്ധ ജുമുഅ ദിനം: പള്ളികളിലെ സഹചാരി പെട്ടി ശേഖരണവും പ്രാർത്ഥനാ സദസ്സും.";
+      else specialtyText = `${periodObj.name} മാസം: ആത്മീയ നവോത്ഥാന ദിനങ്ങൾ.`;
+
+      return {
+        formattedDateFull: `${currentYear} ${ML_MONTHS[currentMonthIndex]} ${currentDay}, ${ML_DAYS[now.getDay()]}ാഴ്ച`,
+        detectedPeriodKey: detectedPeriodKey,
+        hijriTitle: `${periodObj.name} ${activeHijriYear}`,
+        specialtyText: specialtyText,
+        year: currentYear
+      };
+    }
+
+    // 8. TIER & COLLABORATION SWITCHER
+    function setTierLevel(levelKey) {
+      currentTierLevel = levelKey;
+      document.querySelectorAll('.level-pill-btn').forEach(b => b.classList.remove('active'));
+      const activePill = document.getElementById(`tier-pill-${levelKey}`);
+      if (activePill) activePill.classList.add('active');
+
+      const descMap = {
+        global: "തലം: ഗ്ലോബൽ കൗൺസിൽ & പ്രവാസി വിംഗ് (Samastha Islamic Centre - SIC & Pravasi Cell)",
+        national: "തലം: നാഷണൽ കമ്മിറ്റി (National Central Council)",
+        state: "തലം: സംസ്ഥാന സമിതി (Kerala & Other States)",
+        district: "തലം: ജില്ലാ കമ്മിറ്റി",
+        mekhala: "തലം: മേഖലാ / ക്ലസ്റ്റർ സമിതി",
+        unit: "തലം: യൂണിറ്റ് ഘടകം (അടിത്തറ)",
+        subwings: "തലം: സബ് വിംഗുകൾ & മിഷനുകൾ",
+        members: "തലം: മുഴുവൻ അംഗങ്ങൾ (General Cadres)"
+      };
+      const descEl = document.getElementById('active-tier-desc');
+      if (descEl) descEl.innerText = descMap[levelKey] || "തലം: യൂണിറ്റ് ഘടകം";
+
+      refreshAllViews();
+      showToast(`പ്രസ്ഥാന ഘടന തലം മാറ്റി: ${descMap[levelKey]}`);
+    }
+
+    function filterCollabSister(sisterKey) {
+      activeCollabSister = sisterKey;
+      document.querySelectorAll('.collab-chip').forEach(c => c.classList.remove('active'));
+      const chip = document.getElementById(`collab-chip-${sisterKey}`);
+      if (chip) chip.classList.add('active');
+      renderCollabView();
+      switchTab('collab');
+    }
+
+    // 9. UPVOTE & ESCALATION SYSTEM (DEMOCRATIC BOTTOM-UP)
+    function renderIdeasFeed() {
+      const container = document.getElementById('ideas-feed-container');
+      if (!container) return;
+      container.innerHTML = '';
+
+      if (communityIdeas.length === 0) {
+        container.innerHTML = `<p style="font-size:12px; color:#64748b; padding:10px;">ഇതുവരെ പുതിയ നിർദ്ദേശങ്ങൾ സമർപ്പിച്ചിട്ടില്ല.</p>`;
+        return;
+      }
+
+      communityIdeas.forEach(idea => {
+        const pct = Math.round((idea.upvotes / idea.totalMembers) * 100);
+        const isEscalated = idea.upvotes >= Math.ceil(idea.totalMembers * 0.6);
+        const card = document.createElement('div');
+        card.className = "idea-card";
+
+        let tierTag = "🌱 യൂണിറ്റിൽ ചർച്ചയിൽ";
+        if (idea.tierStatus === 'mekhala') tierTag = "🕌 മേഖലയിലേക്ക് എസ്കലേഷൻ ആയി (Escalated to Mekhala)";
+        else if (idea.tierStatus === 'district') tierTag = "🏢 ജില്ലയിലേക്ക് എസ്കലേഷൻ ആയി (Escalated to District)";
+        else if (idea.tierStatus === 'state') tierTag = "🌴 സംസ്ഥാന സമിതിയിൽ (Escalated to State)";
+
+        card.innerHTML = `
+          <div style="min-width:0; flex:1;">
+            <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:4px;">
+              <span style="font-size:13.5px; font-weight:800; color:#0f172a;">${idea.title}</span>
+              <span style="background:#e0f2fe; color:#0369a1; padding:2px 8px; border-radius:6px; font-size:11px; font-weight:700;">${idea.wing}</span>
+              ${isEscalated ? `<span class="escalated-badge">🚀 60%+ അംഗീകാരം! മേൽത്തട്ടിലേക്ക് എടുത്തു</span>` : ''}
+            </div>
+            <p style="font-size:12px; color:#475569; line-height:1.5; margin-bottom:6px;">${idea.desc}</p>
+            <div style="display:flex; align-items:center; gap:10px; font-size:11px; color:#64748b; flex-wrap:wrap;">
+              <span>👤 നിർദ്ദേശിച്ചത്: <strong>${idea.author}</strong></span>
+              <span style="color:#047857; font-weight:700;">${tierTag}</span>
+            </div>
+          </div>
+          <div class="upvote-box">
+            <div style="text-align:right;">
+              <div style="font-size:14px; font-weight:800; color:#047857;">${idea.upvotes} / ${idea.totalMembers} വോട്ടുകൾ</div>
+              <div style="font-size:10.5px; color:#64748b; font-weight:700;">${pct}% പിന്തുണ</div>
+            </div>
+            <button onclick="upvoteIdea(${idea.id})" class="btn-upvote ${idea.hasVoted ? 'voted' : ''}">
+              ▲ അപ്‌വോട്ട് (${idea.upvotes})
+            </button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function upvoteIdea(ideaId) {
+      if (currentUserRole === 'public') {
+        showToast("ഗസ്റ്റ് മോഡിൽ വോട്ട് ചെയ്യാൻ സാധിക്കില്ല!");
+        return;
+      }
+      const idea = communityIdeas.find(i => i.id === ideaId);
+      if (!idea) return;
+
+      if (!idea.hasVoted) {
+        idea.upvotes += 1;
+        idea.hasVoted = true;
+        if (idea.upvotes >= Math.ceil(idea.totalMembers * 0.6) && idea.tierStatus === 'unit') {
+          idea.tierStatus = 'mekhala';
+          showToast(`നിർദ്ദേശം 60%+ വോട്ട് നേടി മേഖലാ കമ്മിറ്റിയിലേക്ക് എസ്കലേഷൻ ആയി!`);
+        } else {
+          showToast(`നിർദ്ദേശത്തിന് അപ്‌വോട്ട് നൽകി!`);
+        }
+      } else {
+        idea.upvotes -= 1;
+        idea.hasVoted = false;
+        showToast(`വോട്ട് പിൻവലിച്ചു!`);
+      }
+      renderIdeasFeed();
+    }
+
+    function openIdeaModal() {
+      const wingSel = document.getElementById('modal-idea-wing');
+      if (wingSel) {
+        wingSel.innerHTML = '';
+        Object.keys(subWingsRegistry).forEach(w => {
+          wingSel.innerHTML += `<option value="${w}">${w}</option>`;
+        });
+      }
+      document.getElementById('idea-modal').classList.remove('hidden');
+    }
+    function closeIdeaModal() { document.getElementById('idea-modal').classList.add('hidden'); }
+
+    function submitNewIdea() {
+      const title = document.getElementById('modal-idea-title').value.trim();
+      const desc = document.getElementById('modal-idea-desc').value.trim();
+      const wing = document.getElementById('modal-idea-wing').value;
+      if (!title || !desc) { alert("ദയവായി തലക്കെട്ടും വിശദീകരണവും നൽകുക!"); return; }
+
+      communityIdeas.unshift({
+        id: Date.now(),
+        title: title,
+        desc: desc,
+        wing: wing,
+        author: loggedInUserTitle,
+        upvotes: 1,
+        totalMembers: 25,
+        tierStatus: "unit",
+        escalated: false,
+        hasVoted: true
+      });
+      closeIdeaModal();
+      renderIdeasFeed();
+      switchTab('escalate');
+      showToast("പുതിയ നിർദ്ദേശം വിജയകരമായി പോസ്റ്റ് ചെയ്തു!");
+    }
+
+    // 10. COMMUNITY WELFARE DESK LOGIC
+    function renderCommunityServices() {
+      const renderCat = (cat, elId) => {
+        const el = document.getElementById(elId);
+        if (!el) return;
+        const items = communityServices.filter(s => s.category === cat);
+        el.innerHTML = items.slice(0, 2).map(i => `• <strong>${i.title}</strong>: ${i.details}`).join('<br>');
+      };
+      renderCat('job', 'community-jobs-list');
+      renderCat('marriage', 'community-marriage-list');
+      renderCat('loan', 'community-loan-list');
+      renderCat('blood', 'community-blood-list');
+      renderCat('equipment', 'community-equipment-list');
+    }
+
+    function openServiceModal() { document.getElementById('service-modal').classList.remove('hidden'); }
+    function closeServiceModal() { document.getElementById('service-modal').classList.add('hidden'); }
+
+    function submitCommunityEntry() {
+      const cat = document.getElementById('modal-service-category').value;
+      const title = document.getElementById('modal-service-title').value.trim();
+      const details = document.getElementById('modal-service-details').value.trim();
+      if (!title || !details) { alert("ദയവായി വിവരങ്ങൾ നൽകുക!"); return; }
+
+      communityServices.unshift({ id: Date.now(), category: cat, title: title, details: details });
+      closeServiceModal();
+      renderCommunityServices();
+      showToast("കമ്മ്യൂണിറ്റി എൻട്രി വിജയകരമായി ചേർത്തു!");
+    }
+
+    // 11. SISTER COLLABORATION TASKS RENDER
+    function renderCollabView() {
+      const container = document.getElementById('collab-tasks-container');
+      if (!container) return;
+      container.innerHTML = '';
+
+      let list = COLLAB_SISTER_TASKS;
+      if (activeCollabSister !== 'all') {
+        list = list.filter(t => t.sister === activeCollabSister);
+      }
+
+      list.forEach(t => {
+        const card = document.createElement('div');
+        card.style.cssText = "background:#fff; border:1px solid #e2e8f0; border-radius:10px; padding:12px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;";
+        card.innerHTML = `
+          <div>
+            <div style="display:flex; align-items:center; gap:6px; margin-bottom:2px;">
+              <span style="font-size:13px; font-weight:800; color:#0f172a;">${t.title}</span>
+              <span style="background:#e0e7ff; color:#3730a3; padding:2px 8px; border-radius:6px; font-size:10.5px; font-weight:800;">${t.sister.toUpperCase()}</span>
+            </div>
+            <p style="font-size:11.5px; color:#64748b;">${t.desc}</p>
+          </div>
+          <div>
+            <span style="background:#dcfce7; color:#15803d; padding:4px 8px; border-radius:6px; font-size:11px; font-weight:700;">സഹകരണം സജീവം</span>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // 12. TOP-DOWN BROADCAST GENERATOR
+    function renderTopDownBroadcast() {
+      const box = document.getElementById('broadcast-msg-box');
+      if (!box) return;
+      const sys = getSystemDateInfo();
+
+      let msg = `*SKSSF നാഷണൽ & സംസ്ഥാന സമിതി ഔദ്യോഗിക സർക്കുലർ*\n📢 *മേൽത്തട്ട് നയങ്ങളും കർമ്മപദ്ധതി ആഹ്വാനങ്ങളും*\n> 🗓 *തീയതി:* ${sys.formattedDateFull}\n> 🌙 *ഹിജ്‌റ:* ${sys.hijriTitle}\n━━━━━━━━━━━━━━━━━━━━━\n\n${ARABIC_SALAM_FULL}\n\nപ്രിയ ജില്ലാ, മേഖലാ, യൂണിറ്റ് ഭാരവാഹികളേ,\n\nസംഘടനയുടെ കേന്ദ്ര-സംസ്ഥാന സമിതികളുടെ തീരുമാനപ്രകാരം താഴെ പറയുന്ന നയപരമായ കർമ്മപദ്ധതികൾ മുഴുവൻ കീഴ്ഘടകങ്ങളിലും സമയബന്ധിതമായി നടപ്പിലാക്കണമെന്ന് ആഹ്വാനം ചെയ്യുന്നു:\n\n`;
+
+      msg += `1. *ഉത്തരേന്ത്യൻ ഖുർബാനി മീറ്റ് മിഷൻ:* പിന്നോക്ക ഗ്രാമങ്ങളിലെ പാവപ്പെട്ട കുടുംബങ്ങളിലേക്ക് ഈദ് വിഹിതം എത്തിക്കാൻ സഹചാരി ഫണ്ട് ശേഖരണം ഊർജ്ജിതമാക്കുക.\n`;
+      msg += `2. *10 Million Swalath Campaign:* ഭൗതിക കലാലയങ്ങളിലും കാമ്പസുകളിലും സ്വലാത്ത് മജ്‌ലിസുകൾ സജീവമാക്കുക.\n`;
+      msg += `3. *വിഖായ ആതുരാലയ & ബ്ലഡ് ബാങ്ക് വിന്യാസം:* സർക്കാർ ആശുപത്രികളിൽ രോഗികൾക്ക് സഹായമെത്തിക്കാനും രക്തദാതാക്കളെ കണ്ടെത്താനും സന്നദ്ധ സൈന്യം രംഗത്തിറങ്ങുക.\n`;
+      msg += `4. *ട്രെൻഡ് കരിയർ ക്ലിനിക്ക്:* വിദ്യാർത്ഥികൾക്ക് സോഫ്റ്റ് സ്കിൽ പരിശീലനവും കരിയർ ഗൈഡൻസും നൽകുക.\n\n`;
+      msg += `ഈ നിർദ്ദേശങ്ങൾ മുഴുവൻ യൂണിറ്റുകളിലും ചർച്ച ചെയ്തു നടപ്പിലാക്കാൻ താത്പര്യപ്പെടുന്നു.\n\n` + getAttributionFooter();
+
+      box.innerText = msg;
+      const wa = document.getElementById('share-broadcast-wa');
+      if (wa) wa.href = `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
+    }
+
+    // 13. TIER MESSAGING LOGIC
+    function renderTierMessageTab() {
+      const sel = document.getElementById('msg-tier-select').value;
+      const box = document.getElementById('tier-dynamic-msg-box');
+      const wa = document.getElementById('share-tier-dynamic-wa');
+      if (!box) return;
+
+      let text = "";
+      if (sel === 'core') text = buildCoreMsg();
+      else if (sel === 'executive') text = buildExecutiveMsg();
+      else if (sel === 'members') text = buildAllMembersMsg();
+      else text = buildPublicMsg();
+
+      box.innerText = text;
+      if (wa) wa.href = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+    }
+
+    // 14. DATA STORAGE & SYNC
+    function getAttributionFooter() {
+      const link = activeUnitData.portalLink || window.location.href;
+      return `━━━━━━━━━━━━━━━━━━━━━\n> 📌 *ഈ സന്ദേശവും കർമ്മപദ്ധതിയും തയ്യാറാക്കിയത് താഴെ കാണുന്ന ഔദ്യോഗിക പേജ് വഴിയാണ്:*\n${link}\n\n_ഇതൊരു സിസ്റ്റം ജനറേറ്റഡ് സന്ദേശമാണ് (Generated Message)_\n*${activeUnitData.name}*`;
+    }
+
+    function buildCoreMsg() {
+      const sys = getSystemDateInfo();
+      let msg = `*${activeUnitData.name}*\n🔒 *കോർ കമ്മിറ്റി ആലോചനാ സന്ദേശം (Tier 1 - Confidential)*\n> 🗓 *തീയതി:* ${sys.formattedDateFull}\n━━━━━━━━━━━━━━━━━━━━━\n\n${ARABIC_SALAM_FULL}\n\nബഹുമാനപ്പെട്ട പ്രസിഡന്റ്, സെക്രട്ടറി, ട്രഷറർ, കൗൺസിലർമാർ അവർകളുടെ ശ്രദ്ധയിലേക്ക്,\n\nനമ്മുടെ യൂണിറ്റിന്റെ പ്രവർത്തനങ്ങൾ കൂടുതൽ ചിട്ടപ്പെടുത്തുന്നതിനായി താഴെ പറയുന്ന നയപരമായ കാര്യങ്ങൾ നമുക്ക് എങ്ങനെ നടപ്പിലാക്കാമെന്ന് ആലോചിച്ചുകൂടെ?\n\n• മഹല്ല് പള്ളി കമ്മിറ്റിയുമായുള്ള ആശയവിനിമയങ്ങൾ ഭംഗിയായി പൂർത്തിയാക്കൽ.\n• പലിശരഹിത നിധി, മാട്രിമോണിയൽ കാര്യങ്ങളിലെ രഹസ്യാത്മകത ഉറപ്പാക്കൽ.\n• അടുത്ത എക്സിക്യൂട്ടീവ് യോഗത്തിന്റെ അജണ്ടകൾ നിശ്ചയിക്കൽ.\n\nതാങ്കളുടെ നിർദ്ദേശങ്ങൾ അറിയിക്കുമല്ലോ.\n\n` + getAttributionFooter();
+      return msg;
+    }
+
+    function buildExecutiveMsg() {
+      const sys = getSystemDateInfo();
+      let msg = `*${activeUnitData.name}*\n🔐 *എക്സിക്യൂട്ടീവ് കൗൺസിൽ സന്ദേശം (Tier 2)*\n> 🗓 *തീയതി:* ${sys.formattedDateFull}\n━━━━━━━━━━━━━━━━━━━━━\n\n${ARABIC_SALAM_FULL}\n\nപ്രിയ ഭാരവാഹികളെ, സബ് വിംഗ് കൺവീനർമാരെ,\n\nയൂണിറ്റിലെ സബ് വിംഗ് പ്രവർത്തനങ്ങൾ കാര്യക്ഷമമാക്കാൻ താഴെ പറയുന്ന കാര്യങ്ങളിൽ നമുക്ക് ഒരുമിച്ച് ശ്രദ്ധ കേന്ദ്രീകരിച്ചാലോ?\n\n• വിഖായ ബ്ലഡ് ബാങ്ക് ഹെൽപ്പ്‌ലൈൻ സജീവമാക്കൽ.\n• ട്രെൻഡ് ജോബ് കണക്റ്റ് & കരിയർ ക്ലിനിക്ക് ക്രമീകരണം.\n• സഹചാരി മെഡിക്കൽ ഉപകരണ ബാങ്ക് ആവശ്യക്കാർക്ക് എത്തിക്കൽ.\n\nഓരോരുത്തരും അവരവരുടെ വിംഗുകളുടെ പ്രവർത്തനങ്ങൾ നേതൃത്വം നൽകി മുന്നോട്ട് കൊണ്ടുപോകുമെന്ന് വിശ്വസിക്കുന്നു.\n\n` + getAttributionFooter();
+      return msg;
+    }
+
+    function buildAllMembersMsg() {
+      const sys = getSystemDateInfo();
+      let msg = `*${activeUnitData.name}*\n👥 *മുഴുവൻ അംഗങ്ങളുടെയും ഗ്രൂപ്പിലേക്കുള്ള സന്ദേശം (Tier 3)*\n> 🗓 *തീയതി:* ${sys.formattedDateFull}\n━━━━━━━━━━━━━━━━━━━━━\n\n${ARABIC_SALAM_FULL}\n\nപ്രിയപ്പെട്ട പ്രവർത്തകസഹപ്രവർത്തകരെ,\n\nനമ്മുടെ യൂണിറ്റിന്റെ പ്രവർത്തനങ്ങളിൽ ഏവർക്കും സ്വാഗതം. പ്രസ്ഥാന ഉന്നമനത്തിനായി നമുക്ക് കൈകോർക്കാം.\n\n• വ്യാഴാഴ്ച രാവുകളിലെ സ്വലാത്ത്-മൗലിദ് മജ്‌ലിസുകളിൽ പങ്കെടുക്കൽ.\n• പള്ളി ശുചീകരണ ശ്രമദാനങ്ങളിൽ പങ്കാളികളാവുക.\n\nപ്രാർത്ഥനയും സഹകരണവും പ്രതീക്ഷിക്കുന്നു.\n\n` + getAttributionFooter();
+      return msg;
+    }
+
+    function buildPublicMsg() {
+      const sys = getSystemDateInfo();
+      let msg = `*${activeUnitData.name}*\n📢 *പൊതുജന അറിയിപ്പ് & സാന്ത്വന സന്ദേശം*\n> 🗓 *തീയതി:* ${sys.formattedDateFull}\n━━━━━━━━━━━━━━━━━━━━━\n\n${ARABIC_SALAM_FULL}\n\nമഹല്ല് നിവാസികളെ, നാട്ടുക്കാരെ,\n\nനമ്മുടെ യൂണിറ്റിന്റെ നേതൃത്വത്തിൽ നാട്ടുകാർക്കായി ഒരുക്കിയിട്ടുള്ള സേവനങ്ങൾ താഴെ നൽകുന്നു:\n\n🩸 *24x7 എമർജൻസി ബ്ലഡ് ബാങ്ക് ഹെൽപ്പ്‌ലൈൻ*\n♿ *സൗജന്യ മെഡിക്കൽ ഉപകരണ ബാങ്ക് (വീൽചെയർ, വാട്ടർ ബെഡ്)*\n💼 *ട്രെൻഡ് സൗജന്യ ജോബ് കണക്റ്റ് & കരിയർ ഗൈഡൻസ്*\n💰 *പലിശരഹിത വായ്പാ നിധി സഹായം*\n\nആവശ്യമുള്ളവർ വളണ്ടിയർമാരുമായി ബന്ധപ്പെടുക.\n\n` + getAttributionFooter();
+      return msg;
+    }
+
+    // WHATSAPP SHARE SHORTCUTS FOR COMMUNITY CARDS
+    function shareJobDeskWA() {
+    function sharePravasiDeskWA() {
+      let msg = `*${activeUnitData.name} - സമസ്ത ഗ്ലോബൽ പ്രവാസി ഡെസ്ക്*\n🌍 *SIC & പ്രവാസി ക്ഷേമ സേവനങ്ങൾ*\n━━━━━━━━━━━━━━━━━━━━━\n\n• *സമസ്ത ഇസ്‌ലാമിക് സെന്റർ (SIC):* ഗൾഫ്-വിദേശ രാജ്യങ്ങളിലെ മലയാളികൾക്കും അന്യദേശക്കാർക്കുമായി പ്രവർത്തിക്കുന്ന ആഗോള കേന്ദ്രം.\n• *സമസ്ത ഇ-ലേണിംഗ് (Global Madrasa):* ലോകത്തെവിടെയും ഇരുന്നുകൊണ്ട് കുട്ടികൾക്ക് സമസ്ത സിലബസിൽ ഓൺലൈൻ മദ്റസാ വിദ്യാഭ്യാസം.\n• *പ്രവാസി ലീഗൽ എയ്ഡ് & ക്ഷേമനിധി:* അടിയന്തിര നിയമസഹായം, പ്രവാസി പെൻഷൻ വിവരങ്ങൾ, നാട്ടിലെ പുനരധിവാസം.\n\nആവശ്യമുള്ള പ്രവാസി സഹോദരങ്ങൾ ബന്ധപ്പെടുക.\n\n` + getAttributionFooter();
+      window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+    function shareMatrimonyDeskWA() {
+      let msg = `*${activeUnitData.name} - മംഗല്യ വേദി (രഹസ്യാത്മകം)*\n💍 *വിവാഹ ആലോചന സഹായ ഡെസ്ക്*\n━━━━━━━━━━━━━━━━━━━━━\n\n${communityServices.filter(s => s.category === 'marriage').map(i => `• *${i.title}*\n  > ${i.details}`).join('\n\n')}\n\n` + getAttributionFooter();
+      window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+    function shareLoanDeskWA() {
+      let msg = `*${activeUnitData.name} - പലിശരഹിത നിധി*\n💰 *ഖർളുൻ ഹസൻ സഹായ സ്കീം*\n━━━━━━━━━━━━━━━━━━━━━\n\n${communityServices.filter(s => s.category === 'loan').map(i => `• *${i.title}*\n  > ${i.details}`).join('\n\n')}\n\n` + getAttributionFooter();
+      window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+    function shareBloodDeskWA() {
+      let msg = `*${activeUnitData.name} - വിഖായ എമർജൻസി ബ്ലഡ് ബാങ്ക്*\n🩸 *അടിയന്തിര രക്തദാന ഹെൽപ്പ്‌ലൈൻ*\n━━━━━━━━━━━━━━━━━━━━━\n\n${communityServices.filter(s => s.category === 'blood').map(i => `• *${i.title}*\n  > ${i.details}`).join('\n\n')}\n\n` + getAttributionFooter();
+      window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+    function shareEquipmentDeskWA() {
+      let msg = `*${activeUnitData.name} - സഹചാരി മെഡിക്കൽ ഉപകരണ ബാങ്ക്*\n♿ *സൗജന്യ രോഗി പരിചരണ സാമഗ്രികൾ*\n━━━━━━━━━━━━━━━━━━━━━\n\n${communityServices.filter(s => s.category === 'equipment').map(i => `• *${i.title}*\n  > ${i.details}`).join('\n\n')}\n\n` + getAttributionFooter();
+      window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
+    // 15. TASK & ANALYTICS RENDERING
+    function getAllTasksPool() {
+      let master = [];
+      Object.keys(UNIVERSAL_HIJRI_CALENDAR).forEach(mKey => {
+        UNIVERSAL_HIJRI_CALENDAR[mKey].tasks.forEach(t => {
+          master.push({ ...t, monthKey: mKey, isCustom: false });
+        });
+      });
+      allCustomTasks.forEach(ct => { master.push({ ...ct, isCustom: true }); });
+      return master;
+    }
+
+    function calculateMetrics() {
+      const pool = getAllTasksPool();
+      const done = pool.filter(t => t.status === 'done').length;
+      const prog = pool.filter(t => t.status === 'in-progress').length;
+      const pend = pool.filter(t => t.status === 'pending').length;
+
+      document.getElementById('stat-scope-total').innerText = pool.length;
+      document.getElementById('stat-scope-done').innerText = done;
+      document.getElementById('stat-scope-progress').innerText = prog;
+      document.getElementById('stat-scope-pending').innerText = pend;
+    }
+
+    function renderTaskContainer(containerId, tasksList) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      container.innerHTML = '';
+      if (!tasksList || tasksList.length === 0) {
+        container.innerHTML = `<p style="font-size:12px; color:#64748b; padding:10px;">ഈ വിഭാഗത്തിൽ നിലവിൽ ടാസ്‌കുകളൊന്നും ലിസ്റ്റ് ചെയ്തിട്ടില്ല.</p>`;
+        return;
+      }
+
+      tasksList.forEach(t => {
+        let badgeClass = "background:#fee2e2; color:#b91c1c; border:1px solid #fca5a5;";
+        let statusLabel = "🔴 ബാക്കി (Pending)";
+        if (t.status === 'done') { badgeClass = "background:#dcfce7; color:#15803d; border:1px solid #86efac;"; statusLabel = "✅ പൂർത്തിയായി (Done)"; }
+        else if (t.status === 'in-progress') { badgeClass = "background:#fef9c3; color:#854d0e; border:1px solid #fde047;"; statusLabel = "🟡 നടക്കുന്നു (In-Progress)"; }
+        else if (t.status === 'missed') { badgeClass = "background:#f3e8ff; color:#6b21a8; border:1px solid #d8b4fe;"; statusLabel = "⚠️ റീഷെഡ്യൂൾ (Missed)"; }
+
+        const card = document.createElement('div');
+        card.style.cssText = "background:#fff; border:1px solid #cbd5e1; border-radius:10px; padding:12px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;";
+        card.innerHTML = `
+          <div style="min-width:0; flex:1;">
+            <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin-bottom:4px;">
+              <span style="font-size:13px; font-weight:800; color:#0f172a;">${t.title}</span>
+              <span style="background:#f1f5f9; color:#475569; padding:2px 8px; border-radius:6px; font-size:10.5px; font-weight:700;">${t.wing}</span>
+            </div>
+            <p style="font-size:11.5px; color:#64748b; margin-bottom:4px;">${t.desc || ''}</p>
+            <span style="font-size:11px; color:#047857; font-weight:700;">ചുമതല: ${t.resp || 'ഭാരവാഹികൾ'}</span>
+          </div>
+          <div>
+            ${currentUserRole !== 'public' ? `
+              <button onclick="cycleTaskStatus(${t.id})" style="${badgeClass} padding:5px 10px; border-radius:8px; font-size:11px; font-weight:800; cursor:pointer;">
+                ${statusLabel} 🔄
+              </button>
+            ` : `
+              <span style="${badgeClass} padding:5px 10px; border-radius:8px; font-size:11px; font-weight:800;">${statusLabel}</span>
+            `}
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function cycleTaskStatus(taskId) {
+      if (currentUserRole === 'public') { showToast("ഗസ്റ്റ് മോഡിൽ മാറ്റങ്ങൾ വരുത്താൻ അനുവാദമില്ല!"); return; }
+      let task = allCustomTasks.find(t => t.id === taskId);
+      if (!task) {
+        Object.keys(UNIVERSAL_HIJRI_CALENDAR).forEach(m => {
+          const found = UNIVERSAL_HIJRI_CALENDAR[m].tasks.find(t => t.id === taskId);
+          if (found) { task = { ...found, monthKey: m }; allCustomTasks.push(task); }
+        });
+      }
+      if (!task) return;
+
+      if (task.status === 'pending') task.status = 'in-progress';
+      else if (task.status === 'in-progress') task.status = 'done';
+      else if (task.status === 'done') task.status = 'missed';
+      else task.status = 'pending';
+
+      calculateMetrics();
+      renderTaskContainer('all-tasks-container', getAllTasksPool());
+      showToast(`സ്റ്റാറ്റസ് മാറ്റി: ${task.title}`);
+    }
+
+    // 16. SUBWINGS VIEW & AGENDA VIEW
+    function renderWingView() {
+      const sel = document.getElementById('wing-select');
+      const wName = sel ? sel.value : "വിഖായ";
+      const reg = subWingsRegistry[wName] || { color: "#047857", taskTitle: "പ്രവർത്തനങ്ങൾ" };
+
+      let msg = `*${activeUnitData.name}*\n🏢 *സബ് വിംഗ് ആക്ഷൻ പ്ലാൻ: ${wName}*\n━━━━━━━━━━━━━━━━━━━━━\n\n${ARABIC_SALAM_FULL}\n\nപ്രിയ ${wName} വിംഗ് ഭാരവാഹികളേ,\n\nനമ്മുടെ യൂണിറ്റിൽ ${wName} വിംഗിന്റെ നേതൃത്വത്തിൽ താഴെ പറയുന്ന കാര്യങ്ങളിൽ നമുക്ക് ശ്രദ്ധ കേന്ദ്രീകരിച്ചാലോ?\n\n• ${reg.taskTitle}\n\nപ്രവർത്തനങ്ങൾ ഭംഗിയായി മുന്നോട്ട് കൊണ്ടുപോകാൻ മുഴുവൻ സഹപ്രവർത്തകരുടെയും സഹകരണം അഭ്യർത്ഥിക്കുന്നു.\n\n` + getAttributionFooter();
+
+      const box = document.getElementById('wing-msg');
+      if (box) box.innerText = msg;
+      const tasks = getAllTasksPool().filter(t => t.wing.includes(wName));
+      renderTaskContainer('wing-tasks-container', tasks);
+    }
+
+    function shareSubwingFullProfileWA() {
+      const sel = document.getElementById('wing-select');
+      const wName = sel ? sel.value : "വിഖായ";
+      const reg = subWingsRegistry[wName] || { color: "#047857", taskTitle: "പ്രവർത്തനങ്ങൾ" };
+      let msg = `*${activeUnitData.name}*\n🛡️ *${wName} സമഗ്ര പ്രൊഫൈൽ & ആക്ഷൻ പ്ലാൻ*\n━━━━━━━━━━━━━━━━━━━━━\n\n${ARABIC_SALAM_FULL}\n\n📌 *പ്രധാന ലക്ഷ്യങ്ങൾ:*\n${reg.taskTitle}\n\n` + getAttributionFooter();
+      window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
+    function renderIndividualView() {
+      const sel = document.getElementById('person-select');
+      const pId = sel ? sel.value : "pres";
+      const leader = activeLeadersList.find(l => l.id === pId) || activeLeadersList[0];
+      if (!leader) return;
+
+      let msg = `*${activeUnitData.name}*\n👤 *കമ്മിറ്റി സ്ഥാനം & വ്യക്തിഗത ചുമതലകൾ*\n> 🏛 *സ്ഥാനം:* ${leader.desig}\n> 👤 *ചുമതല:* ${leader.name}\n━━━━━━━━━━━━━━━━━━━━━\n\n${ARABIC_SALAM_FULL}\n\nബഹുമാനപ്പെട്ട ${leader.name} (${leader.desig}) അവർകളുടെ ശ്രദ്ധയിലേക്ക്,\n\nനമ്മുടെ യൂണിറ്റിന്റെ പ്രവർത്തനങ്ങൾ മികച്ച രീതിയിൽ ഏകോപിപ്പിക്കാൻ താങ്കളുടെ നേതൃത്വത്തിൽ താഴെ പറയുന്ന വിഷയങ്ങളിൽ ശ്രദ്ധ കേന്ദ്രീകരിക്കാൻ താത്പര്യപ്പെടുന്നു.\n\nപ്രസ്ഥാനത്തിന്റെ ഉയർച്ചയ്ക്കായി സർവ്വശക്തൻ തുണക്കട്ടെ.\n\n` + getAttributionFooter();
+
+      const box = document.getElementById('individual-msg');
+      if (box) box.innerText = msg;
+      const wa = document.getElementById('share-ind-wa');
+      if (wa) wa.href = `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
+      const tasks = getAllTasksPool().filter(t => t.resp && t.resp.includes(leader.name));
+      renderTaskContainer('ind-tasks-container', tasks);
+    }
+
+    function renderAgendaView() {
+      const cat = document.getElementById('agenda-category-select').value;
+      const dVal = document.getElementById('agenda-custom-date').value || "നിശ്ചിത തീയതിയിൽ";
+      const tVal = document.getElementById('agenda-custom-time').value || "രാത്രി 8:30 ന്";
+      const vVal = document.getElementById('agenda-custom-venue').value || "മദ്റസ ഹാൾ";
+
+      let meetingTitle = "പ്രതിമാസ എക്സിക്യൂട്ടീവ് യോഗം";
+      if (cat === 'core') meetingTitle = "കോർ കമ്മിറ്റി ആലോചനാ യോഗം (Tier 1)";
+      else if (cat === 'general') meetingTitle = "മുഴുവൻ അംഗങ്ങളുടെ ജനറൽ ബോഡി സംഗമം (Tier 3)";
+      else if (cat === 'public') meetingTitle = "മഹല്ല് പൊതുജന കൂട്ടായ്മ (Tier 4)";
+
+      let msg = `*${activeUnitData.name}*\n🗓 *യോഗ അറിയിപ്പ് (Meeting Notice)*\n━━━━━━━━━━━━━━━━━━━━━\n\n${ARABIC_SALAM_FULL}\n\nപ്രിയപ്പെട്ടവരേ,\n\nനമ്മുടെ യൂണിറ്റിന്റെ *${meetingTitle}* താഴെ പറയുന്ന സമയത്തും വേദിയുമായി ചേരുവാൻ തീരുമാനിച്ചിരിക്കുന്നു.\n\n> 📅 *തീയതി:* ${dVal}\n> ⏰ *സമയം:* ${tVal}\n> 📍 *വേദി:* ${vVal}\n\n📌 *പ്രധാന അജണ്ടകൾ:*\n1. പ്രാർത്ഥന & ഖുർആൻ പാരായണം\n2. മുൻ യോഗ മിനുട്സ് വായന\n3. പ്രോഗ്രസ് അവലോകനം & സബ് വിംഗ് റിപ്പോർട്ടുകൾ\n4. താഴെത്തട്ടിൽ നിന്നുള്ള നിർദ്ദേശങ്ങളുടെ (Upvoted Ideas) അവലോകനം\n5. സാമ്പത്തിക വരവ്-ചെലവ് കണക്കുകൾ & പ്രാർത്ഥന\n\nകൃത്യസമയത്ത് സംബന്ധിക്കണമെന്ന് അഭ്യർത്ഥിക്കുന്നു.\n\n` + getAttributionFooter();
+
+      const box = document.getElementById('agenda-msg');
+      if (box) box.innerText = msg;
+      const wa = document.getElementById('share-agenda-wa');
+      if (wa) wa.href = `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
+    }
+
+    // 17. UI SWITCHING & TAB LOGIC
+    function switchTab(tabKey) {
+      document.querySelectorAll('.content-card').forEach(c => c.classList.add('hidden'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+
+      const targetView = document.getElementById(`view-${tabKey}`);
+      const targetBtn = document.getElementById(`tab-${tabKey}`);
+      if (targetView) targetView.classList.remove('hidden');
+      if (targetBtn) targetBtn.classList.add('active');
+
+      if (tabKey === 'escalate') renderIdeasFeed();
+      else if (tabKey === 'community') renderCommunityServices();
+      else if (tabKey === 'collab') renderCollabView();
+      else if (tabKey === 'broadcast') renderTopDownBroadcast();
+      else if (tabKey === 'messages') renderTierMessageTab();
+      else if (tabKey === 'agenda') renderAgendaView();
+      else if (tabKey === 'subwings') renderWingView();
+      else if (tabKey === 'individuals') renderIndividualView();
+      else if (tabKey === 'admin') renderAdminDashboard();
+    }
+
+    function renderAdminDashboard() {
+      const tbody = document.getElementById('admin-leaders-tbody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+      activeLeadersList.forEach(l => {
+        tbody.innerHTML += `
+          <tr style="border-bottom:1px solid #e2e8f0;">
+            <td style="padding:8px;"><strong>${l.desig}</strong></td>
+            <td style="padding:8px;">${l.name}</td>
+            <td style="padding:8px;">${l.wing}</td>
+            <td style="padding:8px;"><code style="background:#f1f5f9; padding:2px 6px; border-radius:4px;">${l.pin}</code></td>
+            <td style="padding:8px;"><button onclick="promptEditLeaderName('${l.id}')" class="btn-copy" style="font-size:10px; padding:3px 7px;">പേര് മാറ്റുക</button></td>
+          </tr>
+        `;
+      });
+    }
+
+    function promptEditLeaderName(id) {
+      const l = activeLeadersList.find(x => x.id === id);
+      if (!l) return;
+      const n = prompt(`${l.desig} എന്ന സ്ഥാനത്തേക്ക് പേര് നൽകുക:`, l.name);
+      if (n !== null) { l.name = n.trim(); renderAdminDashboard(); populateSelects(); showToast("പേര് മാറ്റി!"); }
+    }
+
+    function populateSelects() {
+      const wSel = document.getElementById('wing-select');
+      const mWSel = document.getElementById('modal-task-wing');
+      if (wSel) {
+        wSel.innerHTML = '';
+        Object.keys(subWingsRegistry).forEach(w => wSel.innerHTML += `<option value="${w}">${w}</option>`);
+      }
+      if (mWSel) {
+        mWSel.innerHTML = '';
+        Object.keys(subWingsRegistry).forEach(w => mWSel.innerHTML += `<option value="${w}">${w}</option>`);
+      }
+
+      const pSel = document.getElementById('person-select');
+      const mResp = document.getElementById('modal-task-resp');
+      if (pSel) {
+        pSel.innerHTML = '';
+        activeLeadersList.forEach(l => pSel.innerHTML += `<option value="${l.id}">${l.desig} (${l.name})</option>`);
+      }
+      if (mResp) {
+        mResp.innerHTML = '';
+        activeLeadersList.forEach(l => mResp.innerHTML += `<option value="${l.name}">${l.desig} (${l.name})</option>`);
+      }
+    }
+
+    function refreshAllViews() {
+      calculateMetrics();
+      renderTaskContainer('all-tasks-container', getAllTasksPool());
+      renderIdeasFeed();
+      renderCommunityServices();
+      renderCollabView();
+      renderTopDownBroadcast();
+      renderTierMessageTab();
+      renderWingView();
+      renderIndividualView();
+      renderAgendaView();
+    }
+
+    // 18. AUTHENTICATION & LOCK
+    function attemptUnlock() {
+      const val = document.getElementById('gate-pin-input').value.trim();
+      const matched = activeLeadersList.find(l => l.pin === val);
+      if (matched || val === "1989") {
+        currentUserRole = matched ? matched.role : "core";
+        loggedInUserTitle = matched ? `${matched.desig} (${matched.name})` : "കോർ കമ്മിറ്റി അഡ്മിൻ";
+        unlockInterface();
+        showToast(`${loggedInUserTitle} ആയി പ്രവേശിച്ചു!`);
+      } else {
+        document.getElementById('auth-error-msg').style.display = "block";
+      }
+    }
+
+    function unlockAsGuest() {
+      currentUserRole = "public";
+      loggedInUserTitle = "പൊതുജന സന്ദർശകൻ";
+      unlockInterface();
+      showToast("ഗസ്റ്റ് മോഡിൽ പ്രവേശിച്ചു (Read-Only)!");
+    }
+
+    function unlockInterface() {
+      document.getElementById('auth-gate-screen').style.display = 'none';
+      document.getElementById('app-container').classList.remove('hidden');
+      const rb = document.getElementById('user-role-badge');
+      if (rb) rb.innerText = loggedInUserTitle;
+      initApp();
+    }
+
+    function lockInterface() {
+      document.getElementById('auth-gate-screen').style.display = 'flex';
+      document.getElementById('app-container').classList.add('hidden');
+    }
+
+    function togglePinVisibility() {
+      const p = document.getElementById('gate-pin-input');
+      p.type = p.type === 'password' ? 'text' : 'password';
+    }
+
+    // 19. UNIT SWITCHER & NEW UNIT CREATION
+    function populateUnitGateSelector() {
+      const sel = document.getElementById('gate-unit-select');
+      if (!sel) return;
+      sel.innerHTML = `<option value="arangadi">SKSSF ആറങ്ങാടി യൂണിറ്റ്</option><option value="new">+ പുതിയ ഘടകം</option>`;
+    }
+    function onGateUnitSelectionChange() {
+      const sel = document.getElementById('gate-unit-select');
+      if (sel && sel.value === 'new') openNewUnitModal();
+    }
+    function openNewUnitModal() { document.getElementById('new-unit-modal').classList.remove('hidden'); }
+    function closeNewUnitModal() { document.getElementById('new-unit-modal').classList.add('hidden'); }
+    function confirmCreateNewUnit() {
+      const name = document.getElementById('modal-unit-name-input').value.trim();
+      const reg = document.getElementById('modal-unit-region-input').value.trim();
+      if (!name) { alert("യൂണിറ്റ് പേര് നൽകുക!"); return; }
+      activeUnitData = { id: "unit_" + Date.now(), name: name, region: reg, portalLink: window.location.href };
+      document.getElementById('app-header-title').innerText = name;
+      closeNewUnitModal();
+      showToast(`${name} സജ്ജീകരിച്ചു!`);
+    }
+
+    function copyElementText(id, msg) {
+      const el = document.getElementById(id);
+      if (el) navigator.clipboard.writeText(el.innerText).then(() => showToast(msg || "കോപ്പി ചെയ്തു!"));
+    }
+
+    function showToast(txt) {
+      const t = document.getElementById('toast');
+      const s = document.getElementById('toast-text');
+      if (t && s) { s.innerText = txt; t.style.display = 'block'; setTimeout(() => t.style.display = 'none', 2600); }
+    }
+
+    // TASK MODAL LOGIC
+    function openTaskModal() { document.getElementById('task-modal').classList.remove('hidden'); }
+    function closeTaskModal() { document.getElementById('task-modal').classList.add('hidden'); }
+    function saveTaskFromModal() {
+      const title = document.getElementById('modal-task-name').value.trim();
+      if (!title) { alert("തലക്കെട്ട് നൽകുക!"); return; }
+      allCustomTasks.push({
+        id: Date.now(),
+        title: title,
+        desc: document.getElementById('modal-task-desc').value.trim(),
+        wing: document.getElementById('modal-task-wing').value,
+        resp: document.getElementById('modal-task-resp').value,
+        tier: document.getElementById('modal-task-tier').value,
+        status: document.getElementById('modal-task-status').value,
+        applicableYear: parseInt(document.getElementById('modal-task-year').value),
+        monthKey: document.getElementById('modal-task-month').value,
+        isRecurring: document.getElementById('modal-task-recurrence').value
+      });
+      closeTaskModal();
+      refreshAllViews();
+      showToast("കർമ്മം സേവ് ചെയ്തു!");
+    }
+
+    function initApp() {
+      const sys = getSystemDateInfo();
+      document.getElementById('live-today-fulldate').innerText = `${sys.formattedDateFull} | ${sys.hijriTitle}`;
+      document.getElementById('live-today-specialty').innerText = sys.specialtyText;
+      populateSelects();
+      refreshAllViews();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      populateUnitGateSelector();
+    });
+  </script>
+</body>
+</html>
